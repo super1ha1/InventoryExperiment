@@ -1,5 +1,4 @@
 'use strict';
-
 var myApp = angular.module('myApp', ['ui.router', 'myApp.controller']);
 myApp.config(function($stateProvider, $urlRouterProvider) {
     //
@@ -51,3 +50,10 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             }
         });
 });
+Parse.initialize("8tR4QlSj9yIvErjnMHCvsielA5I3W7iQ5h6ACs4O", "LEPVlOIFyqPDHA8UyWskmjc0A9MyJ08pbyZbLlLn");
+
+//var TestObject = Parse.Object.extend("TestObject");
+//var testObject = new TestObject();
+//testObject.save({foo: "bar"}).then(function(object) {
+//    alert("yay! it worked");
+//});
