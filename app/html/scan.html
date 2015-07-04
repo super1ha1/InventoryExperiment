@@ -26,12 +26,24 @@
 
     <div class="row">
         <div class="col-sm-6">
-            <div class="span7 text-center">
-                <h4 class="text-center">Truck Alert</h4>
-                <textarea class="text-center" cols="40" rows="2" ></textarea>
-                <pre id="alarm"  style="background-color: #FFFFFF "  >             </pre>
-                <br/>
-                <button class="btn btn-success mce-btn-large">Dispatch Truck</button>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="span7 text-center">
+                        <h4 class="text-center">Truck Alert</h4>
+                        <!--<textarea class="text-center" cols="40" rows="2" ></textarea>-->
+
+                        <pre id="alarm" class="text-danger text-uppercase" style="background-color: #FFFFFF; font-size: 20px "  >      something      </pre>
+                        <br/>
+                        <button class="btn btn-success mce-btn-large">Dispatch Truck</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                        <div class="span7 text-center">
+                            <h1 id="resultScan" class="text-danger text-uppercase" style="margin-top: 80px"></h1>
+                        </div>
+                </div>
             </div>
         </div>
         <div class="col-sm-6 " style="padding-top: 20px">
@@ -43,37 +55,30 @@
                    <pre id="score"  style="background-color: #FFFFFF "  >       </pre>
                 </div>
             </div>
+            <div class="row" style="padding-top: 20px">
+                <div class="col-sm-12 ">
+                    <div class="row" style="background-color: #0a000a ">
+                        <div class="col-sm-6" style="  height: 500px; padding: 10px 10px 5px">
+                            <img src="img/easy/easy1.png"  style="width: 100%; position: relative" id="movingImage">
+                        </div>
+                        <div class="col-sm-6" style=" height: 500px; padding: 10px 10px" >
+                            <div style="background-color: #ffffff; height: 100%;  padding: 10px 10px">
+                                <img src="img/easy/easy2.png" id="image1" style="width: 100%; margin: 10px 0px ">
+                                <img src="img/easy/easy3.png" id="image2" style="width: 100%;  margin: 10px 0px ">
+                                <img src="img/easy/easy4.png" id="image3"  style="width: 100%;  margin: 10px 0px ">
+                                <img src="img/easy/easy5.png" id="image4" style="width: 100%;  margin: 10px 0px ">
+                                <div class="span7 text-center">
+                                    <button class="btn btn-lg btn-success" ng-click="cancel()">Cancel</button>
+                                </div>
+                            </div>
 
-
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="span7 text-center">
-                <h1 id="resultScan" class="text-danger text-uppercase" style="margin-top: 80px"></h1>
-
-            </div>
-        </div>
-        <div class="col-sm-6 ">
-            <div class="row" style="background-color: #0a000a ">
-                <div class="col-sm-6" style="  height: 500px; padding: 10px 10px 5px">
-                    <img src="img/easy/easy1.png"  style="width: 100%; position: relative" id="movingImage">
-                </div>
-                <div class="col-sm-6" style=" height: 500px; padding: 10px 10px" >
-                    <div style="background-color: #ffffff; height: 100%;  padding: 10px 10px">
-                        <img src="img/easy/easy2.png" id="image1" style="width: 100%; margin: 10px 0px ">
-                        <img src="img/easy/easy3.png" id="image2" style="width: 100%;  margin: 10px 0px ">
-                        <img src="img/easy/easy4.png" id="image3"  style="width: 100%;  margin: 10px 0px ">
-                        <img src="img/easy/easy5.png" id="image4" style="width: 100%;  margin: 10px 0px ">
-                        <div class="span7 text-center">
-                            <button class="btn btn-lg btn-success" ng-click="cancel()">Cancel</button>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 
