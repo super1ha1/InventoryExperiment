@@ -27,9 +27,14 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('truck', {
             url: "/truck",
             templateUrl: "html/truck.html",
-            controller: 'trialController'
+            controller: 'truckController'
         })
 
+        .state('test', {
+            url: "/test",
+            templateUrl: "html/test.html",
+            controller: 'testController'
+        })
 
         .state('state1.list', {
             url: "/list",
