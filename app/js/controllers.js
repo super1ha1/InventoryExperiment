@@ -11,36 +11,102 @@ angular.module('myApp.controller', [])
             $state.go('scan');
         };
 
-        function moveImage(){
-            var count = 0, //Work with actual number type
-                image = document.getElementById('movingImage'),
-                timerId = 0;
-            var rect = image.getBoundingClientRect();
-            console.log(rect.top, rect.right, rect.bottom, rect.left);
-            var top = rect.height;
-            timerId = setInterval( function() { //This function is called by the browser every 33 milliseconds
-                top += 50;
-                count++;
-                if( count == 5 ) {
-                    clearInterval( timerId ); //Stop the interval because left is > 200
-                }
-                var pixel = top + "px";
-                console.log("top: " + top + " pixel: " + pixel);
-               //angular.element('#movingImage').css('top' ,'pixel');
-               // angular.element.find("#movingImage")[0].style.top = pixel;
-                $("#movingImage").css("top" ,"pixel");
-            }, 1000 );
-        }
-        //moveImage();
-        $(document).ready(function() {
-            $("#movingImage").animate({top: "+=350"}, 5000);
-            //$("#movingImage").animate({left: "-=300"}, 1000);
-        });
 
-        //$(document).ready(function() {
-        //    $("#").animate({left: "+=500"}, 2000);
-        //    $("#b").animate({left: "-=300"}, 1000);
-        //});
+        var totalScore = 0 ;
+        $("#score").text(totalScore);
+
+        var interval = setInterval(function(){
+        //for (var i = 0 ;i < 100; i ++){
+            $(document).ready(function() {
+                checkScore();
+                function checkScore(){
+                    console.log("Start new scan here " );
+                    $("#resultScan").text(function(i, originalText){
+                        console.log(" New round: Current Text is: " + originalText);
+                        if( originalText === "TIMEOUT"){
+                            console.log("result: " +  "TIMEOUT");
+                        }else if(originalText === "CORRECT"){
+                            totalScore += 10;
+                            console.log("score: " +  totalScore);
+                            $("#score").text(totalScore);
+                        }else if(originalText ===  "INCORRECT"){
+                            console.log("result: " +  "INCORRECT");
+                        }
+                        return "";
+                    });
+                }
+
+                //$("#resultScan").text("");
+
+
+                var correctImage =  getRandomImage() ;
+                var correctImagePosition = getRandomPosition();
+                $("#image" + correctImagePosition).attr('src',  "img/easy/easy" + correctImage + ".png")
+                    .click(function(){
+                        $("#resultScan").text("CORRECT");
+                        $("#movingImage").stop(false, true);
+                    });
+
+                $("#movingImage")
+                    .attr('src',  "img/easy/easy" + correctImage + ".png");
+
+                $("#image" + correctImagePosition).siblings("img").click(function(){
+                    $("#resultScan").text("INCORRECT");
+                    $("#movingImage").stop(false, true);
+                });
+
+                var wrongImage = getAnotherRandomImage(correctImage);
+                var wrongImagePosition = getAnotherRandomPosition(correctImagePosition);
+                $("#image" + wrongImagePosition).attr('src',  "img/easy/easy" + wrongImage + ".png");
+
+                wrongImage = getAnotherRandomImage(correctImage);
+                wrongImagePosition = getAnotherRandomPosition(correctImagePosition);
+                $("#image" + wrongImagePosition).attr('src',  "img/easy/easy" + wrongImage + ".png");
+
+                $("#movingImage")
+                    .animate({top: "+=350"}, 7000, function(){
+                        $("#resultScan").text(function(i, originalText) {
+                            console.log("End animate, Current Text is: " + originalText);
+                            if (originalText === "") {
+                                return "TIMEOUT";
+                            }
+                        });
+                    })
+                    .animate({opacity: "0"}, 200)
+                    .animate({top: "20", opacity: "1"}, 10 );
+            });
+
+        }, 9000);
+
+        $scope.cancel = function(){
+            clearInterval(interval);
+        };
+
+
+
+        function getRandomImage(){
+            return Math.floor((Math.random() * 20) + 1);
+        }
+        function getAnotherRandomImage ( firstImage ){
+            var second =  Math.floor((Math.random() * 20) + 1);
+            while ( second === firstImage){
+                second =  Math.floor((Math.random() * 20) + 1);
+            }
+            return second;
+        }
+
+        function getRandomPosition(){
+            return Math.floor((Math.random() * 4) + 1 );
+        }
+
+        function getAnotherRandomPosition(firstImage){
+            var second =  Math.floor((Math.random() * 4) + 1);
+            while ( second === firstImage){
+                second =  Math.floor((Math.random() * 4) + 1);
+            }
+            return second;
+        }
+
 
     });
 // A complex subclass of Parse.Object
