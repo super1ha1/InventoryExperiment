@@ -64,7 +64,7 @@ angular.module('myApp.controller', [])
                 $("#image" + wrongImagePosition).attr('src',  "img/easy/easy" + wrongImage + ".png");
 
                 $("#movingImage")
-                    .animate({top: "+=350"}, 7000, function(){
+                    .animate({top: "+=350"}, 4000, function(){
                         $("#resultScan").text(function(i, originalText) {
                             console.log("End animate, Current Text is: " + originalText);
                             if (originalText === "") {
@@ -76,7 +76,7 @@ angular.module('myApp.controller', [])
                     .animate({top: "20", opacity: "1"}, 10 );
             });
 
-        }, 9000);
+        }, 5000);
 
         $scope.cancel = function(){
             clearInterval(interval);
