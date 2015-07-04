@@ -2,13 +2,36 @@
  * Created by Khue on 24/6/2015.
  */
 
+var start = 0;
+var totalScore = 0 ;
+var scanInterval;
+var truckInterval;
+
 angular.module('myApp.controller', [])
 .controller('trialController', function($state, $scope) {
-      $scope.goToTruck= function(){
-          $state.go('truck');
-      };
-        $scope.goToScan= function(){
-            $state.go('scan');
+
+
+
+        $("#score").text(totalScore);
+        $(document).ready(function() {
+            if( start === 0){
+                scanInterval  = setInterval(function(){
+                    checkScore();
+                    showOneScan();
+                }, 9000);
+                showOneTruck();
+                truckInterval = setInterval(function () {
+                    showOneTruck();
+                }, 30 * 1000);
+                start = 1;
+                console.log("Start the trial here: " + start);
+            }else{
+
+            }
+        });
+
+        $scope.dispatchTruck = function(){
+
         };
         function checkScore(){
             //console.log("Start new scan here " );
@@ -30,19 +53,38 @@ angular.module('myApp.controller', [])
                 return "";
             });
         }
-        var totalScore = 0 ;
-        var scanInterval;
-        $("#score").text(totalScore);
 
 
-        $(document).ready(function() {
-            scanInterval  = setInterval(function(){
-                checkScore();
-                showOneScan();
-            }, 9000);
+        function showOneTruck(){
+            var truckTime = getRandomTruckTime();
+            console.log("Truck Time: " + truckTime);
 
-        });
+            var typeAlarm = getTypeAlarm();
+            console.log("Type: " + typeAlarm);
 
+            setTimeout(function(){
+                console.log("Callback when truck end here");
+                notifyTruckFull();
+            }, truckTime * 1000);
+
+            $(".progress-bar")
+                .animate({
+                    width: "100%"
+                }, truckTime * 1000, function () {
+                    console.log("Callback when truck end here");
+                    notifyTruckFull();
+                }).delay(10 * 10000)
+                .animate({
+                    width: "0%"
+                }, 10);
+
+            if( typeAlarm === 1 ){
+                var alarmTimeout = setTimeout(function(){
+                    console.log("Set False Alarm truck is full: ");
+                    notifyTruckFull();
+                },truckTime/2 * 1000);
+            }
+        }
         function showOneScan(){
             var correctImage =  getRandomImage() ;
             var correctImagePosition = getRandomPosition();
@@ -80,12 +122,19 @@ angular.module('myApp.controller', [])
                     });
                 });
         }
+        function notifyTruckFull(){
+            $("#alarm").text("Truck is full");
+            setTimeout(function(){
+                $("#alarm").text("");
+            }, 3 * 1000);
+        }
 
-
-        $scope.cancel = function(){
-            clearInterval(scanInterval);
-        };
-
+        function getRandomTruckTime(){
+            return Math.floor((Math.random() * 11) + 12);
+        }
+        function getTypeAlarm(){
+            return ( Math.floor((Math.random() * 100) + 1) % 2) ;
+        }
         function getRandomImage(){
             return Math.floor((Math.random() * 20) + 1);
         }
@@ -96,11 +145,9 @@ angular.module('myApp.controller', [])
             }
             return second;
         }
-
         function getRandomPosition(){
             return Math.floor((Math.random() * 4) + 1 );
         }
-
         function getAnotherRandomPosition(firstImage){
             var second =  Math.floor((Math.random() * 4) + 1);
             while ( second === firstImage){
@@ -109,7 +156,15 @@ angular.module('myApp.controller', [])
             return second;
         }
 
-
+        $scope.goToTruck= function(){
+            $state.go('truck');
+        };
+        $scope.goToScan= function(){
+            $state.go('scan');
+        };
+        $scope.cancel = function(){
+            clearInterval(scanInterval);
+        };
     })
     .controller("testController", function($scope, $state){
         $(document).ready(function() {

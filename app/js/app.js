@@ -27,7 +27,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('truck', {
             url: "/truck",
             templateUrl: "html/truck.html",
-            controller: 'truckController'
+            controller: 'trialController'
         })
 
         .state('test', {
