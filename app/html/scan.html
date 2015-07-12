@@ -4,6 +4,29 @@
             <h4 class="text-nowrap">Automated Warehouse Management System</h4>
 
         </div>
+
+
+
+        <script type="text/ng-template" id="myModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">I'm a modal!</h3>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li ng-repeat="item in items">
+                        <a ng-click="selected.item = item">{{ item }}</a>
+                    </li>
+                </ul>
+                Selected: <b>{{ selected.item }}</b>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+
+
+
         <div class="col-sm-6 ">
             <div class="row">
                 <div class="col-sm-2">
@@ -32,9 +55,10 @@
                         <h4 class="text-center">Truck Alert</h4>
                         <!--<textarea class="text-center" cols="40" rows="2" ></textarea>-->
 
-                        <pre id="alarm" class="text-danger text-uppercase" style="background-color: #FFFFFF; font-size: 20px "  >           </pre>
+                        <pre id="alarm" class="text-danger text-uppercase" style="background-color: #FFFFFF; font-size: 20px;
+                         height: 50px"  >           </pre>
                         <br/>
-                        <button class="btn btn-success mce-btn-large" ng-click="dispatchTruck()">Dispatch Truck</button>
+                        <button class="btn btn-success mce-btn-large" ng-click="open()">Dispatch Truck</button>
                     </div>
                 </div>
             </div>
