@@ -55,14 +55,8 @@ angular.module('myApp.controller', [])
         //$scope.toggleAnimation = function () {
         //    $scope.animationsEnabled = !$scope.animationsEnabled;
         //};
-
-
-
 // Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-
-
-
+// It is not the same as the $modal service used above
         $("#score").text(totalScore);
         $(document).ready(function() {
             if( start === 0){
@@ -120,7 +114,7 @@ angular.module('myApp.controller', [])
                 //$("#blue")
                 //    .animate( {backgroundColor:'#fce3ac'}, 6 * 1000);
                 $('tr')
-                    .animate( {backgroundColor:'#fce3ac'}, 6 * 1000);
+                    .animate( {height: 300}, 6 * 1000);
                     //.animate({
                     //    'background-color': '#0000FF'
                     //}, truckTime * 1000, function () {
