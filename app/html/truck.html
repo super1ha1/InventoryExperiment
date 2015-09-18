@@ -1,4 +1,5 @@
 <div class="container">
+    <!-- Header -->
     <div class="row">
         <div class="col-sm-6 text-center">
             <h4 class="text-nowrap">Automated Warehouse Management System</h4>
@@ -26,23 +27,38 @@
     <div class="row" style="padding-top: 30px">
         <div class="col-sm-6 col-sm-offset-6">
 
-            <!--<textarea cols="28" rows="15" ></textarea>-->
-            <!--<div class="progress">-->
-                <!--<div class="progress progress-striped active">-->
-                    <!--<div class="progress-bar progress-bar-success" style="width:0%"></div>-->
-                <!--</div>-->
-            <!--</div>-->
+            <!-- Truck Animation -->
             <div class="row">
                 <div class="col-sm-6">
                     <table class="table table-bordered" id="truck" >
                         <tbody>
-                        <tr style="height: 0; background-color: #fce3ac"><td></td></tr>
+
+                            <tr id = "5" style="height: 0; background-color: #fce3ac">
+                                <td>100%</td>
+                            </tr>
+
+                            <tr id = "4" style="height: 0; background-color: #fce3ac">
+                                <td>80%</td>
+                            </tr>
+
+                            <tr id = "3" style="height: 0; background-color: #fce3ac">
+                                <td>60%</td>
+                            </tr>
+
+                            <tr id = "2" style="height: 0; background-color: #fce3ac">
+                                <td>40%</td>
+                            </tr>
+
+                            <tr  id = "1" style="height: 0; background-color: #fce3ac">
+                                <td>20%</td>
+                            </tr>
+
                         </tbody>
-
-
                     </table>
                 </div>
             </div>
+
+            <!-- 2 wheels -->
             <div class="row"  style="margin-top: -20px; left: -300px ; position: relative">
                 <div class="col-sm-1 col-sm-offset-1">
                     <img src="img/wheel.png">
@@ -54,10 +70,11 @@
 
             <br/>
 
-                <button class="btn btn-success mce-btn-large"
+            <!-- Dispatch button-->
+            <button class="btn btn-success mce-btn-large"
                         style="margin-left: 45px; margin-top: 10px" ng-click="open()"
-                        >Dispatch Truck</button>
-            </div>
+                    >Dispatch Truck</button>
+        </div>
     </div>
 
 </div>

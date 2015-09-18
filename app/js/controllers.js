@@ -322,11 +322,15 @@ angular.module('myApp.controller', [])
                     checkScore();
                     showOneScan();
                 }, 9000);
+
                 showOneTruck();
+
                 truckInterval = setInterval(function () {
                     showOneTruck();
                 }, 30 * 1000);
+
                 start = 1;
+
                 console.log("Start the trial here: " + start);
             }else{
 
@@ -336,6 +340,7 @@ angular.module('myApp.controller', [])
         $scope.dispatchTruck = function(){
 
         };
+
         function checkScore(){
             //console.log("Start new scan here " );
             $("#movingRow")
@@ -343,12 +348,10 @@ angular.module('myApp.controller', [])
                 .animate({top: "20", opacity: "1"}, 10 );
 
             $("#resultScan").text(function(i, originalText){
-                //console.log(" New round: Current Text is: " + originalText);
                 if( originalText === "TIMEOUT"){
-                    //console.log("result: " +  "TIMEOUT");
+
                 }else if(originalText === "CORRECT"){
                     totalScore += 10;
-                    //console.log("score: " +  totalScore);
                     $("#score").text(totalScore);
                 }else if(originalText ===  "INCORRECT"){
                     //console.log("result: " +  "INCORRECT");
@@ -359,41 +362,86 @@ angular.module('myApp.controller', [])
 
 
         function showOneTruck(){
+
             var truckTime = getRandomTruckTime();
-            console.log("Truck Time: " + truckTime);
-
             var typeAlarm = getTypeAlarm();
-            console.log("Type: " + typeAlarm);
+            var currentPosition = 1;
+            var eachRowSecond = truckTime / 5 * 1000;
+            var eachRowInterval;
+            console.log("Truck Time: " + truckTime + " Type Alarm: " + typeAlarm);
 
-            setTimeout(function(){
-                console.log("Start new setTimeout here");
-                notifyTruckFull();
+            displayOneTruck();
 
+            //setTimeout(function(){
+            //    displayOneTruck();
+            //}, truckTime * 1000);
+
+            //if( typeAlarm === 1 ){
+            //    var alarmTimeout = setTimeout(function(){
+            //        console.log("Set False Alarm truck is full: ");
+            //        notifyTruckFull();
+            //    },truckTime/2 * 1000);
+            //}
+
+
+
+            function displayOneTruck() {
+                console.log("Start new setTimeout to show one truck here");
+                eachRowInterval = setInterval(function(){
+                    if (currentPosition <= 5){
+                        animateOneRow();
+                    }else{
+                        console.log("Stop animate row here ");
+                        clearInterval(eachRowInterval);
+                        $('tr')
+                            .animate({
+                                'background-color': '#fce3ac'
+                            }, 10);
+                    }
+                }, eachRowSecond);
                 //$("#blue")
                 //    .animate( {backgroundColor:'#fce3ac'}, 6 * 1000);
-                $('tr')
-                    .animate( {height: 300}, 6 * 1000);
-                    //.animate({
-                    //    'background-color': '#0000FF'
-                    //}, truckTime * 1000, function () {
-                    //    console.log("Callback when truck end here: animate color");
-                    //    notifyTruckFull();
-                    //});
-                    //.delay(10 * 10000)
-                    //.animate({
-                    //    backgroundColor : '#FFFFFF'
-                    //}, 10);
-
-            }, truckTime * 1000);
-
-
-
-            if( typeAlarm === 1 ){
-                var alarmTimeout = setTimeout(function(){
-                    console.log("Set False Alarm truck is full: ");
-                    notifyTruckFull();
-                },truckTime/2 * 1000);
+                //$('tr')
+                //    //.animate( {height: 300}, 6 * 1000);
+                //    .animate({
+                //        'background-color': '#0000FF'
+                //    }, truckTime * 1000, function () {
+                //        console.log("Callback when truck end here: animate color");
+                //        notifyTruckFull();
+                //    })
+                //    //.delay(10 * 10000)
+                //    .animate({
+                //        'background-color': '#fce3ac'
+                //    }, 10);
             }
+
+            function animateOneRow() {
+                console.log("Current row: " + currentPosition);
+                $('#' + currentPosition)
+                    //.show()
+                    .animate({
+                        'background-color': '#0000FF'
+                    },eachRowSecond , function(){
+                        currentPosition++;
+                    });
+            }
+
+            function notifyTruckFull(){
+                $("#alarm").text("Truck is full");
+                setTimeout(function(){
+                    $("#alarm").text("");
+                }, 3 * 1000);
+            }
+
+            function getRandomTruckTime(){
+                return Math.floor((Math.random() * 11) + 12); //12-24 seconds
+            }
+
+            function getTypeAlarm(){
+                // 0 Miss Alarm or 1 False Alarm +  normal > alarm when truck is full
+                return ( Math.floor((Math.random() * 100) + 1) % 2) ;
+            }
+
         }
         function showOneScan(){
             var correctImage =  getRandomImage() ;
@@ -501,19 +549,6 @@ angular.module('myApp.controller', [])
                 return second;
             }
 
-        }
-        function notifyTruckFull(){
-            $("#alarm").text("Truck is full");
-            setTimeout(function(){
-                $("#alarm").text("");
-            }, 3 * 1000);
-        }
-
-        function getRandomTruckTime(){
-            return Math.floor((Math.random() * 11) + 12);
-        }
-        function getTypeAlarm(){
-            return ( Math.floor((Math.random() * 100) + 1) % 2) ;
         }
 
 
