@@ -43,18 +43,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
                 $scope.items = ["A", "List", "Of", "Items"];
             }
         })
-
-        .state('state2', {
-            url: "/state2",
-            templateUrl: "partials/state2.html"
-        })
-        .state('state2.list', {
-            url: "/list",
-            templateUrl: "partials/state2.list.html",
-            controller: function($scope) {
-                $scope.things = ["A", "Set", "Of", "Things"];
-            }
-        });
 });
 Parse.initialize("8tR4QlSj9yIvErjnMHCvsielA5I3W7iQ5h6ACs4O", "LEPVlOIFyqPDHA8UyWskmjc0A9MyJ08pbyZbLlLn");
 

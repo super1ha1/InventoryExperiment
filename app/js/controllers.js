@@ -1,5 +1,5 @@
 /**
- * Created by Khue on 24/6/2015.
+ * Controllers
  */
 
 var start = 0;
@@ -417,13 +417,24 @@ angular.module('myApp.controller', [])
 
             function animateOneRow() {
                 console.log("Current row: " + currentPosition);
-                $('#' + currentPosition)
+                //$('#' + currentPosition)
+                //    //.show()
+                //    .animate({
+                //        'background-color': '#0000FF'
+                //    },eachRowSecond , function(){
+                //        currentPosition++;
+                //    });
+
+                $('#animateDiv')
                     //.show()
                     .animate({
-                        'background-color': '#0000FF'
+                        'height': '+=20'
                     },eachRowSecond , function(){
                         currentPosition++;
                     });
+
+                //$("#animateDiv")
+                //    .animate()
             }
 
             function notifyTruckFull(){
