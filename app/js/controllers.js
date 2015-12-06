@@ -264,6 +264,20 @@ var imageCombinationArray = [
     4443,
     4444
 ];
+const MIN_TRUCK_FULL = 12;
+const MAX_TRUCK_FULL = 22;
+const FULL_TO_OVERLOAD = 10;
+const TOTAL_TRIAL = 20;
+const CORRECT_DISPATCH_POINT = 100;
+const CORRECT_SCAN_LOW_POINT = 10;
+const CORRECT_SCAN_HIGH_POINT = 20;
+const SCAN_TIMEOUT = 20;
+var AI_success_rate = 0.8;
+
+var AI_Initial_suggestion = [];
+var  AI_suggestion = [];
+var  AI_random = [];
+const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
 //angular.module('ui.bootstrap.demo', ['ui.bootstrap']).controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 //
 //    $scope.items = items;
@@ -279,9 +293,6 @@ var imageCombinationArray = [
 //        $modalInstance.dismiss('cancel');
 //    };
 //});
-
-
-
 angular.module('myApp.controller', [])
     .controller('trialController',  function ($scope,  $state) {
 
@@ -315,6 +326,11 @@ angular.module('myApp.controller', [])
         //};
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above
+        AI_Initial_suggestion = generateAIInitialArray(TOTAL_TRIAL * AI_success_rate);
+        console.log(AI_Initial_suggestion);
+        AI_random = getRandomArray(TOTAL_TRIAL);
+        AI_suggestion = sortArrayAccordingToRandom(AI_Initial_suggestion, AI_random);
+        console.log(AI_suggestion);
         $("#score").text(totalScore);
         $(document).ready(function() {
             if( start === 0){
@@ -445,7 +461,8 @@ angular.module('myApp.controller', [])
             }
 
             function getRandomTruckTime(){
-                return Math.floor((Math.random() * 11) + 12); //12-24 seconds
+                return Math.floor((Math.random() * (MAX_TRUCK_FULL - MIN_TRUCK_FULL + 1))
+                + MIN_TRUCK_FULL); //12-24 seconds
             }
 
             function getTypeAlarm(){
@@ -562,7 +579,43 @@ angular.module('myApp.controller', [])
 
         }
 
-
+        function getRandomArray(N){
+            var randomArray = [];
+            for ( var i = 0 ; i < N; i++){
+                randomArray[i] = Math.random();
+            }
+            return randomArray;
+        }
+        function generateAIInitialArray(correctGuess){
+            var array = [];
+            var each_wrong_alarm = (TOTAL_TRIAL - correctGuess)/2;
+            for ( var i = 0 ; i < TOTAL_TRIAL; i ++){
+                if(i < each_wrong_alarm)
+                    array[i] = AI_FALSE_ALARM;
+                else if( i < 2 * each_wrong_alarm)
+                    array[i] = AI_MISS_ALARM;
+                else
+                    array[i] = AI_CORRECT;
+            }
+            return array;
+        }
+        function sortArrayAccordingToRandom(sortArray, randomArray){
+            var sortedArray = [], indexArray = [], i, j;
+            var originalRandomArray = randomArray.slice(0);
+            randomArray.sort(function(a, b){return a-b;});
+            for( i = 0 ; i < originalRandomArray.length; i ++){
+                for ( j = 0 ; j < randomArray.length; j++){
+                    if( originalRandomArray[i] === randomArray[j]){
+                        indexArray[i] = j;
+                        break;
+                    }
+                }
+            }
+            for( i = 0 ; i < sortArray.length; i ++){
+                sortedArray[i] = sortArray[indexArray[i]];
+            }
+            return sortedArray;
+        }
         $scope.goToTruck= function(){
             $state.go('truck');
         };
@@ -573,6 +626,7 @@ angular.module('myApp.controller', [])
             clearInterval(scanInterval);
         };
     })
+
     .controller("testController", function($scope, $state){
         $(document).ready(function() {
             $("row2").animate({
