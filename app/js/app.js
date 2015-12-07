@@ -14,14 +14,21 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('user_info', {
             url: "/user",
-            templateUrl: "html/user_info.html"
+            templateUrl: "html/user_info.html",
+            controller: 'UserController'
 
         })
 
         .state('scan', {
             url: "/scan",
-            templateUrl: "html/scan.html",
+            templateUrl: "html/scan_easy.html",
             controller: 'trialController'
+        })
+
+        .state('scan_hard', {
+            url: "/scan2",
+            templateUrl: "html/scan_hard.html",
+            controller: 'trialHardController'
         })
 
         .state('truck', {

@@ -278,6 +278,8 @@ var AI_Initial_suggestion = [];
 var  AI_suggestion = [];
 var  AI_random = [];
 const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
+const SCAN_INTERVAL = 9, TRUCK_INTERVAL = 30;
+var EASY;
 //angular.module('ui.bootstrap.demo', ['ui.bootstrap']).controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 //
 //    $scope.items = items;
@@ -327,23 +329,22 @@ angular.module('myApp.controller', [])
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above
         AI_Initial_suggestion = generateAIInitialArray(TOTAL_TRIAL * AI_success_rate);
-        console.log(AI_Initial_suggestion);
         AI_random = getRandomArray(TOTAL_TRIAL);
         AI_suggestion = sortArrayAccordingToRandom(AI_Initial_suggestion, AI_random);
-        console.log(AI_suggestion);
+
         $("#score").text(totalScore);
         $(document).ready(function() {
             if( start === 0){
                 scanInterval  = setInterval(function(){
                     checkScore();
                     showOneScan();
-                }, 9000);
+                }, SCAN_INTERVAL * 1000);
 
                 showOneTruck();
 
                 truckInterval = setInterval(function () {
                     showOneTruck();
-                }, 30 * 1000);
+                }, TRUCK_INTERVAL * 1000);
 
                 start = 1;
 
@@ -634,45 +635,25 @@ angular.module('myApp.controller', [])
             },5000);
         });
     })
-    .controller("truckController", function($scope, $state){
+    .controller("trialHardController", function($scope, $state){
+        console.log("Scan hard here");
+
         $(document).ready(function() {
-            showOneTruck();
-            var truckInterval = setInterval(function () {
-                showOneTruck();
-            }, 30 * 1000);
+            $("row2").animate({
+                backgroundColor: "#000"
+            },5000);
         });
-        function showOneTruck(){
-            var truckTime = getRandomTruckTime();
-            console.log("Truck Time: " + truckTime);
-
-            var typeAlarm = getTypeAlarm();
-            console.log("Type: " + typeAlarm);
-
-            $(".progress-bar")
-                .animate({
-                    width: "100%"
-                }, truckTime * 1000, function () {
-                    console.log("Callback when truck end here");
-                }).delay(10 * 10000)
-                .animate({
-                    width: "0%"
-                }, 10);
-
-            if( typeAlarm === 1 ){
-                var alarmTimeout = setTimeout(function(){
-                    console.log("Set False Alarm truck is full: ");
-                    $("#alarm").text("Truck is full");
-                    setTimeout(function(){
-                        $("#alarm").text("");
-                    }, 3 * 1000);
-                },truckTime/2 * 1000);
-            }
-        }
-        function getRandomTruckTime(){
-            return Math.floor((Math.random() * 11) + 12);
-        }
-        function getTypeAlarm(){
-            return ( Math.floor((Math.random() * 1000) + 1) % 2) ;
+    })
+    .controller("UserController", function($scope, $state){
+        EASY = getRandomEasyOrHardRound();
+        console.log(EASY);
+        $scope.goToEasyOrHard = function(){
+            if(EASY )
+                $state.go("scan");
+            else $state.go("scan_hard");
+        };
+        function getRandomEasyOrHardRound(){
+            return Math.floor( (Math.random() * 100) + 1) % 2 === 1;
         }
     });
 // A complex subclass of Parse.Object
