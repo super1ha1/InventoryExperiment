@@ -96,47 +96,42 @@
                 <div class="col-sm-12 ">
                     <div class="row" style="background-color: #0a000a ">
                         <!-- Display the correct image -->
-                        <div class="col-sm-6" style="  height: 500px; padding: 10px 10px 5px">
-                            <div class="row" id="movingRow" style="position: relative">
-                                <img src="img/easy/item1.png"  style="width: 22%; float: left; margin-left: 15px; " id="movingImage1">
-                                <img src="img/easy/item2.png"  style="width: 22%; float: left; " id="movingImage2">
-                                <img src="img/easy/item3.png"  style="width: 22%; float: left; " id="movingImage3">
-                                <img src="img/easy/item4.png"  style="width: 22%; float: left; " id="movingImage4">
+                        <div class="col-sm-6" style="  height: 500px; padding: 10px 10px 10px 20px">
+                            <div class="row imageRow" id="movingRow" style="position: relative; ">
+                                <img src="img/easy/item1.png"  class="eachImage"  id="movingImage1">
+                                <img src="img/easy/item2.png" class="eachImage"   id="movingImage2">
+                                <img src="img/easy/item3.png"  class="eachImage"   id="movingImage3">
                             </div>
                         </div>
                         <!-- Display the 3 wrong images + 1 correct image-->
                         <div class="col-sm-6" style=" height: 500px; padding: 10px 10px" >
                             <div style="background-color: #ffffff; height: 100%;  padding: 10px 10px">
 
-                                <div class="row" id="row1" style="margin-left: 10px ; margin-top: 20px">
-                                    <img src="img/easy/item1.png" id="image11" style="width: 22%; float: left">
-                                    <img src="img/easy/item2.png" id="image12" style="width: 22%; float: left">
-                                    <img src="img/easy/item3.png" id="image13" style="width: 22%; float: left">
-                                    <img src="img/easy/item4.png" id="image14" style="width: 22%; float: left">
+                                <div class="row imageRow answerRow" id="row1">
+                                    <img src="img/easy/item1.png" id="image11" class="eachImage"  >
+                                    <img src="img/easy/item2.png" id="image12" class="eachImage"  >
+                                    <img src="img/easy/item3.png" id="image13" class="eachImage">
                                 </div>
 
-                                <div class="row"  id="row2" style="margin-left: 10px ; margin-top: 20px">
-                                <img src="img/easy/item1.png" id="image21" style="width: 22%; float: left">
-                                    <img src="img/easy/item2.png" id="image22" style="width: 22%; float: left">
-                                    <img src="img/easy/item3.png" id="image23" style="width: 22%; float: left">
-                                    <img src="img/easy/item4.png" id="image24" style="width: 22%; float: left">
+                                <div class="row imageRow answerRow"  id="row2">
+                                <img src="img/easy/item1.png" id="image21" class="eachImage">
+                                    <img src="img/easy/item2.png" id="image22" class="eachImage">
+                                    <img src="img/easy/item3.png" id="image23" class="eachImage">
                                 </div>
 
-                                <div class="row" id="row3"  style="margin-left: 10px ; margin-top: 20px">
-                                <img src="img/easy/item1.png" id="image31" style="width: 22%; float: left">
-                                    <img src="img/easy/item2.png" id="image32" style="width: 22%; float: left">
-                                    <img src="img/easy/item3.png" id="image33" style="width: 22%; float: left">
-                                    <img src="img/easy/item4.png" id="image34" style="width: 22%; float: left">
+                                <div class="row imageRow answerRow" id="row3"  >
+                                    <img src="img/easy/item1.png" id="image31" class="eachImage">
+                                    <img src="img/easy/item2.png" id="image32" class="eachImage">
+                                    <img src="img/easy/item3.png" id="image33" class="eachImage">
                                 </div>
 
-                                <div class="row" id="row4" style="margin-left: 10px ; margin-top: 20px">
-                                    <img src="img/easy/item1.png" id="image41" style="width: 22%; float: left">
-                                    <img src="img/easy/item2.png" id="image42" style="width: 22%; float: left">
-                                    <img src="img/easy/item3.png" id="image43" style="width: 22%; float: left">
-                                    <img src="img/easy/item4.png" id="image44" style="width: 22%; float: left">
+                                <div class="row imageRow answerRow" id="row4" >
+                                    <img src="img/easy/item1.png" id="image41" class="eachImage">
+                                    <img src="img/easy/item2.png" id="image42" class="eachImage">
+                                    <img src="img/easy/item3.png" id="image43" class="eachImage">
                                 </div>
 
-                                <div class="span7 text-center">
+                                <div class="span7 text-center" style="margin-top: 20px">
                                     <button class="btn btn-lg btn-success" ng-click="cancel()">Cancel</button>
                                 </div>
 

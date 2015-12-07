@@ -36,3 +36,19 @@
 table, th, td {
   border: 1px solid black;
 }
+
+/*-----------------------------------------------*/
+div.imageRow {
+    width: auto;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+div.answerRow{
+   margin: 20px 10px 0 10px
+}
+img.eachImage{
+    width: 22%;
+    float: left;
+}
