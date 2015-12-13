@@ -51,6 +51,8 @@ var  AI_random = [];
 const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
 const SCAN_INTERVAL = 9, TRUCK_INTERVAL = 30;
 var EASY;
+var currentFourAnswerArray = [123, 123, 123, 123];
+
 //angular.module('ui.bootstrap.demo', ['ui.bootstrap']).controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 //
 //    $scope.items = items;
@@ -243,13 +245,17 @@ angular.module('myApp.controller', [])
 
         }
         function showOneScan(){
-            var correctImage =  getRandomImage() ;
-            var correctImagePosition = getRandomPosition();
+            var correctImage =  getRandomImage(currentFourAnswerArray) ;
+            var correctImagePosition = getRandomPositionForCorrectAnswer();
+            currentFourAnswerArray[correctImagePosition -1 ] = correctImage;
+
             var wrongImage = getAnotherRandomImage(correctImage);
             var wrongImagePosition = getAnotherRandomPosition(correctImagePosition);
-
+            currentFourAnswerArray[wrongImagePosition -1 ] = wrongImage;
             console.log(correctImage + " " + correctImagePosition + " " + wrongImage
                 +  " " + wrongImagePosition );
+            console.log(currentFourAnswerArray);
+
             setDisplayMovingImage( correctImage);
             setDisplayCorrectImage(correctImagePosition, correctImage);
             setDisplayWrongImage(wrongImagePosition, wrongImage);
@@ -323,8 +329,12 @@ angular.module('myApp.controller', [])
                 return parseInt(decimalNumber / Math.pow(10, baseOf10InDecimal -1 )) % 10;
             }
 
-            function getRandomImage(){
-                return EASY_IMAGE_ARRAY[Math.floor((Math.random() * EASY_IMAGE_ARRAY.length) )];
+            function getRandomImage(currentFourAnswerArray){
+                var value = EASY_IMAGE_ARRAY[Math.floor((Math.random() * EASY_IMAGE_ARRAY.length) )];
+                while(currentFourAnswerArray.indexOf(value) !== -1){
+                    value = EASY_IMAGE_ARRAY[Math.floor((Math.random() * EASY_IMAGE_ARRAY.length) )];
+                }
+                return value;
             }
 
             function getAnotherRandomImage ( firstImage ){
@@ -335,7 +345,7 @@ angular.module('myApp.controller', [])
                 return second;
             }
 
-            function getRandomPosition(){
+            function getRandomPositionForCorrectAnswer(){
                 return Math.floor((Math.random() * 4) + 1 );
             }
 
@@ -413,9 +423,11 @@ angular.module('myApp.controller', [])
             },5000);
         });
     })
+
     .controller("UserController", function($scope, $state){
         EASY = getRandomEasyOrHardRound();
-        console.log(EASY);
+        console.log(EASY + " currently, set EASY to true as default > always show the easy level");
+        EASY = true;
         $scope.goToEasyOrHard = function(){
             if(EASY )
                 $state.go("scan");
