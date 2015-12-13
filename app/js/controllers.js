@@ -42,14 +42,14 @@ const TOTAL_TRIAL = 20;
 const CORRECT_DISPATCH_POINT = 100;
 const CORRECT_SCAN_LOW_POINT = 10;
 const CORRECT_SCAN_HIGH_POINT = 20;
-const SCAN_TIMEOUT = 20;
+const SCAN_TIMEOUT = 7;
 var AI_success_rate = 0.8;
 
 var AI_Initial_suggestion = [];
 var  AI_suggestion = [];
 var  AI_random = [];
 const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
-const SCAN_INTERVAL = 9, TRUCK_INTERVAL = 30;
+const SCAN_INTERVAL = SCAN_TIMEOUT + 1, TRUCK_INTERVAL = 30;
 var EASY;
 var currentFourAnswerArray = [123, 123, 123, 123];
 
@@ -107,12 +107,14 @@ angular.module('myApp.controller', [])
         $("#score").text(totalScore);
         $(document).ready(function() {
             if( start === 0){
+                showOneScan();
+                showOneTruck();
+
                 scanInterval  = setInterval(function(){
                     checkScore();
                     showOneScan();
                 }, SCAN_INTERVAL * 1000);
 
-                showOneTruck();
 
                 truckInterval = setInterval(function () {
                     showOneTruck();
@@ -287,7 +289,7 @@ angular.module('myApp.controller', [])
             function setWrongImageClick(correctImagePosition) {
                 $("#row" + correctImagePosition).siblings("div.row")
                     .click(function(){
-                        $("#resultScan").text("INCORRECT");
+                        $("#resultScan").text("INCORRECT").css("color", "red");
                         stopMovingImage();
                 });
             }
@@ -300,7 +302,7 @@ angular.module('myApp.controller', [])
                 //)
                 $(  "#row" + correctImagePosition)
                     .click(function(){
-                        $("#resultScan").text("CORRECT");
+                        $("#resultScan").text("CORRECT").css("color", "#00b050");
                         stopMovingImage();
                     });
             }
