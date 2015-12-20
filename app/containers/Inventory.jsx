@@ -1,10 +1,9 @@
-
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
-
+import '../css/app.css';
 
 class Inventory extends Component {
 
@@ -13,7 +12,7 @@ class Inventory extends Component {
 
             <div className="container">
                 <Header />
-                
+
                 <div className="row">
 
                     <div className="col-sm-6">
@@ -105,8 +104,8 @@ const Scan = ({}) => (
             <div className="col-sm-3">
                 <h4>Total Score:</h4>
             </div>
-            <div className="col-sm-2">
-                <pre id="score"  style={{backgroundColor: '#FFFFFF' }}  ></pre>
+            <div className="col-sm-3">
+                <pre id="score"  style={{backgroundColor: '#FFFFFF', height: '15px', marginTop:'5px' }}  ></pre>
             </div>
         </div>
         <ScanDisplay />
@@ -119,40 +118,8 @@ class ScanDisplay extends Component {
             <div className="row" style={{paddingTop: '20px'}}>
                 <div className="col-sm-12 ">
                     <div className="row" style={{backgroundColor: '#0a000a' }}>
-                        <div className="col-sm-6" style={{  height: '500px' , padding: '10px 10px 10px 20px'}}>
-                            <div className="row imageRow" id="movingRow" style={{position: 'relative' }}>
-                                <img src="img/easy/item1.png"  className="eachImage"  id="movingImage1" />
-                                <img src="img/easy/item2.png" className="eachImage"   id="movingImage2" />
-                                <img src="img/easy/item3.png"  className="eachImage"   id="movingImage3" />
-                            </div>
-                        </div>
-                        <div className="col-sm-6" style={{ height: '500px', padding: '10px 10px'}} >
-                            <div style={{backgroundColor: '#ffffff', height: '100%',  padding: '10px 10px'}}>
-                                <div className="row imageRow answerRow" id="row1">
-                                    <img src="img/easy/item1.png" id="image11" className="eachImage"  />
-                                    <img src="img/easy/item2.png" id="image12" className="eachImage"  />
-                                    <img src="img/easy/item3.png" id="image13" className="eachImage"/>
-                                </div>
-                                <div className="row imageRow answerRow"  id="row2">
-                                    <img src="img/easy/item1.png" id="image21" className="eachImage"/>
-                                    <img src="img/easy/item2.png" id="image22" className="eachImage"/>
-                                    <img src="img/easy/item3.png" id="image23" className="eachImage"/>
-                                </div>
-                                <div className="row imageRow answerRow" id="row3"  >
-                                    <img src="img/easy/item1.png" id="image31" className="eachImage"/>
-                                    <img src="img/easy/item2.png" id="image32" className="eachImage"/>
-                                    <img src="img/easy/item3.png" id="image33" className="eachImage"/>
-                                </div>
-                                <div className="row imageRow answerRow" id="row4" >
-                                    <img src="img/easy/item1.png" id="image41" className="eachImage"/>
-                                    <img src="img/easy/item2.png" id="image42" className="eachImage"/>
-                                    <img src="img/easy/item3.png" id="image43" className="eachImage"/>
-                                </div>
-                                <div className="span7 text-center" style={{marginTop: '20px'}}>
-                                    <button className="btn btn-lg btn-success" ng-click="cancel()">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
+                        <MovingImage />
+                        <AnswerImage />
                     </div>
                 </div>
             </div>
@@ -160,4 +127,45 @@ class ScanDisplay extends Component {
     }
 }
 
+const MovingImage = () => (
+    <div className="col-sm-6" style={{  height: '500px' , padding: '10px 10px 10px 20px'}}>
+        <div className="row imageRow" id="movingRow" style={{position: 'relative' }}>
+            <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'}  className="eachImage"  id="movingImage1" />
+            <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} className="eachImage"   id="movingImage2" />
+            <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'}  className="eachImage"   id="movingImage3" />
+        </div>
+    </div>
+)
+
+const AnswerImage = () => (
+    <div className="col-sm-6" style={{ height: '500px', padding: '10px 10px'}} >
+        <div style={{backgroundColor: '#ffffff', height: '100%',  padding: '10px 10px'}}>
+
+            <div className="row imageRow answerRow" id="row1">
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image11" className="eachImage"  />
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image12" className="eachImage"  />
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image13" className="eachImage"/>
+            </div>
+
+            <div className="row imageRow answerRow"  id="row2">
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image21" className="eachImage"/>
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image22" className="eachImage"/>
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image23" className="eachImage"/>
+            </div>
+
+            <div className="row imageRow answerRow" id="row3"  >
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image31" className="eachImage"/>
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image32" className="eachImage"/>
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image33" className="eachImage"/>
+            </div>
+
+            <div className="row imageRow answerRow" id="row4" >
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image41" className="eachImage"/>
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image42" className="eachImage"/>
+                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image43" className="eachImage"/>
+            </div>
+
+        </div>
+    </div>
+)
 export default Inventory
