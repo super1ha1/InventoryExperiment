@@ -53,53 +53,10 @@ const SCAN_INTERVAL = SCAN_TIMEOUT + 1, TRUCK_INTERVAL = 30;
 var EASY;
 var currentFourAnswerArray = [123, 123, 123, 123];
 
-//angular.module('ui.bootstrap.demo', ['ui.bootstrap']).controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
-//
-//    $scope.items = items;
-//    $scope.selected = {
-//        item: $scope.items[0]
-//    };
-//
-//    $scope.ok = function () {
-//        $modalInstance.close($scope.selected.item);
-//    };
-//
-//    $scope.cancel = function () {
-//        $modalInstance.dismiss('cancel');
-//    };
-//});
+
 angular.module('myApp.controller', [])
     .controller('trialController',  function ($scope,  $state) {
-        //$scope.items = ['item1', 'item2', 'item3'];
-        //
-        //$scope.animationsEnabled = true;
-        //
-        //$scope.open = function (size) {
-        //
-        //    var modalInstance = $modal.open({
-        //        animation: $scope.animationsEnabled,
-        //        templateUrl: 'myModalContent.html',
-        //        controller: 'ModalInstanceCtrl',
-        //        size: size,
-        //        resolve: {
-        //            items: function () {
-        //                return $scope.items;
-        //            }
-        //        }
-        //    });
-        //
-        //    modalInstance.result.then(function (selectedItem) {
-        //        $scope.selected = selectedItem;
-        //    }, function () {
-        //        $log.info('Modal dismissed at: ' + new Date());
-        //    });
-        //};
-        //
-        //$scope.toggleAnimation = function () {
-        //    $scope.animationsEnabled = !$scope.animationsEnabled;
-        //};
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above
+
         AI_Initial_suggestion = generateAIInitialArray(TOTAL_TRIAL * AI_success_rate);
         AI_random = getRandomArray(TOTAL_TRIAL);
         AI_suggestion = sortArrayAccordingToRandom(AI_Initial_suggestion, AI_random);
@@ -246,6 +203,7 @@ angular.module('myApp.controller', [])
             }
 
         }
+
         function showOneScan(){
             var correctImage =  getRandomImage(currentFourAnswerArray) ;
             var correctImagePosition = getRandomPositionForCorrectAnswer();
@@ -368,6 +326,7 @@ angular.module('myApp.controller', [])
             }
             return randomArray;
         }
+
         function generateAIInitialArray(correctGuess){
             var array = [];
             var each_wrong_alarm = (TOTAL_TRIAL - correctGuess)/2;
@@ -381,6 +340,7 @@ angular.module('myApp.controller', [])
             }
             return array;
         }
+
         function sortArrayAccordingToRandom(sortArray, randomArray){
             var sortedArray = [], indexArray = [], i, j;
             var originalRandomArray = randomArray.slice(0);
@@ -398,12 +358,15 @@ angular.module('myApp.controller', [])
             }
             return sortedArray;
         }
+
         $scope.goToTruck= function(){
             $state.go('truck');
         };
+
         $scope.goToScan= function(){
             $state.go('scan');
         };
+
         $scope.cancel = function(){
             clearInterval(scanInterval);
         };
@@ -416,6 +379,7 @@ angular.module('myApp.controller', [])
             },5000);
         });
     })
+
     .controller("trialHardController", function($scope, $state){
         console.log("Scan hard here");
 
@@ -439,6 +403,7 @@ angular.module('myApp.controller', [])
             return Math.floor( (Math.random() * 100) + 1) % 2 === 1;
         }
     });
+
 // A complex subclass of Parse.Object
 var Monster = Parse.Object.extend("Monster", {
     // Instance methods
@@ -458,7 +423,4 @@ var Monster = Parse.Object.extend("Monster", {
     }
 });
 
-//var monster = Monster.spawn(200);
-//alert(monster.get('strength'));  // Displays 200.
-//alert(monster.sound); // Displays Rawr.
 

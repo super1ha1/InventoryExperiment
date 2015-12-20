@@ -1,0 +1,21 @@
+1) Header: title and 2 image button to navigate between scan and truck
+	
+2) Main Part
+	a) Truck Alert: 
+		3 Props: text, show (boolean)	
+		onDispatchTruckClick() 
+
+	b) Scan Result
+		2 Props: text, show
+
+	c) Scan 
+		i) ScanDisplay
+			* Total Score: 1 props: score
+		
+			* MovingImage
+				- 1 props: current value of list array(ex : 123)
+				- Each Image: 1 prop: current value of image
+		
+			* AnswerImage
+				- Each Anser Image: 3 props: current value, correctScan(boolean) and onClick
+					+ Each Image: 1 props: current value of image

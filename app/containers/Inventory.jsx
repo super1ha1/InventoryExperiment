@@ -4,8 +4,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import '../css/app.css';
+import { setCorrectImage, setWrongImage } from '../actions'
 
 class Inventory extends Component {
+
+    constructor(props) {
+        super(props);
+    }
 
     render() {
         return (
@@ -20,7 +25,7 @@ class Inventory extends Component {
                         <ScanResult />
                     </div>
 
-                    <Scan />
+                    <Scan correctImage={this.props.correctImage}/>
 
                 </div>
             </div>
@@ -108,7 +113,7 @@ const Scan = ({}) => (
                 <pre id="score"  style={{backgroundColor: '#FFFFFF', height: '15px', marginTop:'5px' }}  ></pre>
             </div>
         </div>
-        <ScanDisplay />
+        <ScanDisplay correctImage={this.props.correctImage} />
     </div>
 )
 
@@ -118,7 +123,7 @@ class ScanDisplay extends Component {
             <div className="row" style={{paddingTop: '20px'}}>
                 <div className="col-sm-12 ">
                     <div className="row" style={{backgroundColor: '#0a000a' }}>
-                        <MovingImage />
+                        <MovingImage  correctImage={this.props.correctImage }/>
                         <AnswerImage />
                     </div>
                 </div>
@@ -127,12 +132,14 @@ class ScanDisplay extends Component {
     }
 }
 
-const MovingImage = () => (
+const MovingImage = (correctImage) => (
     <div className="col-sm-6" style={{  height: '500px' , padding: '10px 10px 10px 20px'}}>
         <div className="row imageRow" id="movingRow" style={{position: 'relative' }}>
-            <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'}  className="eachImage"  id="movingImage1" />
-            <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} className="eachImage"   id="movingImage2" />
-            <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'}  className="eachImage"   id="movingImage3" />
+            {correctImage.map(image => {
+                return (
+                    <img src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                )
+            }) }
         </div>
     </div>
 )
@@ -168,4 +175,26 @@ const AnswerImage = () => (
         </div>
     </div>
 )
-export default Inventory
+
+
+
+function mapStateToProps(state, ownProps) {
+    return {
+        correctImage: state.scan.correctImage,
+        wrongImage: state.scan.wrongImage
+    }
+}
+
+function mapDispatchToProps(dispatch, ownProps) {
+    return {
+        setCorrectImage: bindActionCreators(setCorrectImage, dispatch),
+        setWrongImage: bindActionCreators(setWrongImage, dispatch)
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Inventory);
+
+
