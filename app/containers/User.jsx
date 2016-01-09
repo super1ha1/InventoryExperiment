@@ -93,7 +93,7 @@ class User extends Component {
 
                             <div className="form-group">
                                 <div className="col-sm-offset-4 col-sm-10">
-                                    <Link to="/inventory">
+                                    <Link to="/scan">
 
                                     <button type="submit" ng-click="goToEasyOrHard()" className="btn btn-lg btn-success">
                                         Start

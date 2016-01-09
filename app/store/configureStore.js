@@ -13,6 +13,7 @@ const reducer = combine(reducers);
 let store;
 
 if (__DEV__) {
+  console.log("in configure store", " in DEV mode")
   const createStore = compose(
     applyMiddleware(
       thunk,
@@ -20,6 +21,7 @@ if (__DEV__) {
     ),
     persistState('inventory', { key: 'jessie' })
   )(baseCreateStore);
+
 
   store = createStore(reducer);
 

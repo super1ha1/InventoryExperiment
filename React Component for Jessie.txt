@@ -13,7 +13,7 @@
 			* Total Score: 1 props: score
 		
 			* MovingImage
-				- 1 props: current value of list array(ex : 123)
+				- 1 props: current value of list array(ex : [1, 2, 3])
 				- Each Image: 1 prop: current value of image
 		
 			* AnswerImage

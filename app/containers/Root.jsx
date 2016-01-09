@@ -29,8 +29,8 @@ const Root = ({store, history}) => (
           getComponent={makeGetComponent('./User')}
           />
       <Route
-          path="/inventory"
-          getComponent={makeGetComponent('./Inventory')}
+          path="/scan"
+          getComponent={makeGetComponent('./Scan')}
           />
     </Router>
   </Provider>

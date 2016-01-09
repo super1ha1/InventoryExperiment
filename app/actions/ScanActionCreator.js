@@ -18,7 +18,7 @@ export function setSingleImage(value){
 
 export function setWrongImage(index, value, correct){
     return {
-        type: SET_CORRECT_IMAGE,
+        type: SET_WRONG_IMAGE,
         index,
         value,
         correct

@@ -1,4 +1,3 @@
-
 import { SET_SINGLE_IMAGE, SET_CORRECT_IMAGE,SET_WRONG_IMAGE } from '../actions';
 
 const initialState = [
@@ -12,7 +11,7 @@ const initialState = [
     }
 ]
 
-export default function app(state = initialState, action = null) {
+export default function scan(state = initialState, action = null) {
     switch (action.type) {
         case SET_CORRECT_IMAGE:
             return Object.assign({}, state, { correctImage: action.value });
