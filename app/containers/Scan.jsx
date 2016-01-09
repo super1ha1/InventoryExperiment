@@ -201,9 +201,6 @@ class AnswerImage   extends Component {
 }
 
 
-
-
-
 function mapStateToProps(state, ownProps) {
     return {
         correctImage: state.scan.correctImage,
