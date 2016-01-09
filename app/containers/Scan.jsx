@@ -13,6 +13,9 @@ class Scan extends Component {
     }
 
     render() {
+        const {correctImage} = this.props
+        console.log("correct Image props: " , correctImage)
+
         return (
 
             <div className="container">
@@ -103,7 +106,7 @@ const ScanResult = ({}) => (
     </div>
 )
 
-const ScanBody = ({}) => (
+const ScanBody = ({ correctImage}) => (
     <div className="col-sm-6 " style={{paddingTop: '20px'}}>
         <div className="row">
             <div className="col-sm-3">
@@ -113,17 +116,19 @@ const ScanBody = ({}) => (
                 <pre id="score"  style={{backgroundColor: '#FFFFFF', height: '15px', marginTop:'5px' }}  ></pre>
             </div>
         </div>
-        <ScanDisplay correctImage={this.props.correctImage} />
+        <ScanDisplay correctImage={correctImage} />
     </div>
 )
 
 class ScanDisplay extends Component {
+
     render (){
+        const {correctImage} = this.props
         return (
             <div className="row" style={{paddingTop: '20px'}}>
                 <div className="col-sm-12 ">
                     <div className="row" style={{backgroundColor: '#0a000a' }}>
-                        <MovingImage  correctImage={this.props.correctImage }/>
+                        <MovingImage  correctImage={ correctImage }/>
                         <AnswerImage />
                     </div>
                 </div>
@@ -132,12 +137,12 @@ class ScanDisplay extends Component {
     }
 }
 
-const MovingImage = (correctImage) => (
+const MovingImage = ({correctImage}) => (
     <div className="col-sm-6" style={{  height: '500px' , padding: '10px 10px 10px 20px'}}>
         <div className="row imageRow" id="movingRow" style={{position: 'relative' }}>
-            {correctImage.map(image => {
+            {correctImage.map( image => {
                 return (
-                    <img src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                    <img key={correctImage.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
                 )
             }) }
         </div>
@@ -179,7 +184,6 @@ const AnswerImage = () => (
 
 
 function mapStateToProps(state, ownProps) {
-    console.log("State: ",  state )
     return {
         correctImage: state.scan.correctImage,
         wrongImage: state.scan.wrongImage
@@ -196,6 +200,6 @@ function mapDispatchToProps(dispatch, ownProps) {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ScanBody);
+)(Scan);
 
 
