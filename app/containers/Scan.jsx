@@ -13,8 +13,8 @@ class Scan extends Component {
     }
 
     render() {
-        const {correctImage} = this.props
-        console.log("correct Image props: " , correctImage)
+        const {correctImage, wrongImage} = this.props
+        console.log("correct Image in Scan Container: " , correctImage)
 
         return (
 
@@ -28,7 +28,7 @@ class Scan extends Component {
                         <ScanResult />
                     </div>
 
-                    <ScanBody correctImage={this.props.correctImage}/>
+                    <ScanBody correctImage={correctImage} wrongImage={wrongImage} />
 
                 </div>
             </div>
@@ -106,7 +106,7 @@ const ScanResult = ({}) => (
     </div>
 )
 
-const ScanBody = ({ correctImage}) => (
+const ScanBody = ({ correctImage, wrongImage}) => (
     <div className="col-sm-6 " style={{paddingTop: '20px'}}>
         <div className="row">
             <div className="col-sm-3">
@@ -116,20 +116,20 @@ const ScanBody = ({ correctImage}) => (
                 <pre id="score"  style={{backgroundColor: '#FFFFFF', height: '15px', marginTop:'5px' }}  ></pre>
             </div>
         </div>
-        <ScanDisplay correctImage={correctImage} />
+        <ScanDisplay correctImage={correctImage} wrongImage={wrongImage} />
     </div>
 )
 
 class ScanDisplay extends Component {
 
     render (){
-        const {correctImage} = this.props
+        const {correctImage, wrongImage} = this.props
         return (
             <div className="row" style={{paddingTop: '20px'}}>
                 <div className="col-sm-12 ">
                     <div className="row" style={{backgroundColor: '#0a000a' }}>
                         <MovingImage  correctImage={ correctImage }/>
-                        <AnswerImage />
+                        <AnswerImage wrongImage = {wrongImage} />
                     </div>
                 </div>
             </div>
@@ -149,37 +149,58 @@ const MovingImage = ({correctImage}) => (
     </div>
 )
 
-const AnswerImage = () => (
-    <div className="col-sm-6" style={{ height: '500px', padding: '10px 10px'}} >
-        <div style={{backgroundColor: '#ffffff', height: '100%',  padding: '10px 10px'}}>
+class AnswerImage   extends Component {
 
-            <div className="row imageRow answerRow" id="row1">
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image11" className="eachImage"  />
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image12" className="eachImage"  />
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image13" className="eachImage"/>
+    render() {
+        const {wrongImage} = this.props
+        console.log("wrongImage in Answer class", wrongImage)
+        const firstRow = wrongImage[0]
+        const secondRow = wrongImage[1]
+        const thirdRow = wrongImage[2]
+        const forthRow = wrongImage[3]
+
+        return (
+
+        <div className="col-sm-6" style={{ height: '500px', padding: '10px 10px'}} >
+            <div style={{backgroundColor: '#ffffff', height: '100%',  padding: '10px 10px'}}>
+
+                <div className="row imageRow answerRow" id="row1">
+                {firstRow.value.map(image => {
+                    return (
+                        <img key={firstRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                    )
+                })}
+                </div>
+
+                <div className="row imageRow answerRow"  id="row2">
+                {secondRow.value.map(image => {
+                    return (
+                        <img key={secondRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                    )
+                })}
+                </div>
+
+                <div className="row imageRow answerRow" id="row3"  >
+                    {thirdRow.value.map(image => {
+                        return (
+                            <img key={thirdRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                        )
+                    })}
+                </div>
+
+                <div className="row imageRow answerRow" id="row4" >
+                    {forthRow.value.map(image => {
+                        return (
+                            <img key={forthRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                        )
+                    })}
+                </div>
             </div>
-
-            <div className="row imageRow answerRow"  id="row2">
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image21" className="eachImage"/>
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image22" className="eachImage"/>
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image23" className="eachImage"/>
-            </div>
-
-            <div className="row imageRow answerRow" id="row3"  >
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image31" className="eachImage"/>
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image32" className="eachImage"/>
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image33" className="eachImage"/>
-            </div>
-
-            <div className="row imageRow answerRow" id="row4" >
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item1.png'} id="image41" className="eachImage"/>
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item2.png'} id="image42" className="eachImage"/>
-                <img src={'http://52.25.173.78/inventory/app/img/easy/item3.png'} id="image43" className="eachImage"/>
-            </div>
-
         </div>
-    </div>
-)
+        )}
+}
+
+
 
 
 

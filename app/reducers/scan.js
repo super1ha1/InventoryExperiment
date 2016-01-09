@@ -6,6 +6,7 @@ const initialState =
         wrongImage: [
             { value: [1, 2, 3], correct: false,  index: 0},
             { value: [1, 2, 3], correct: false,  index: 1},
+            { value: [1, 2, 3], correct: false,  index: 2},
             { value: [1, 2, 3], correct: false,  index: 2}
         ]
     }
