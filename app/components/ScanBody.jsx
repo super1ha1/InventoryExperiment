@@ -62,7 +62,6 @@ class AnswerImage   extends Component {
 
     render() {
         const {wrongImage} = this.props
-        console.log("wrongImage in Answer class", wrongImage)
         const firstRow = wrongImage[0]
         const secondRow = wrongImage[1]
         const thirdRow = wrongImage[2]

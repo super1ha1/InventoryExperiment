@@ -11,15 +11,32 @@ import { setCorrectImage, setWrongImage } from '../actions'
 import { ScanBody } from '../components/ScanBody.jsx'
 import * as ScanUtils from '../utils/ScanUtils'
 
+@ReactTimeout
 class Scan extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            recommended: false
+        };
+        this.showOneScan = this.showOneScan.bind(this)
     }
 
     componentDidMount(){
         console.log("Component mounted now")
+        this.showOneScan()
+    }
+
+    showOneScan(){
+        const { setTimeout } = this.props.reactTimeout
         const { wrongImage} = this.props
+
+        const id = setTimeout(() => {
+            console.log(`${id} - end`)
+
+
+        }, 5000)
+        console.log(`${id} - begin`)
         ScanUtils.showOneScan(wrongImage)
         this.props.setCorrectImage(ScanUtils.getCorrectImageArray())
         this.props.setWrongImage({...ScanUtils.getCorrectAnswerArray()})
@@ -28,7 +45,6 @@ class Scan extends Component {
 
     render() {
         const {correctImage, wrongImage} = this.props
-        console.log("correct Image in Scan Container render: " , correctImage)
 
         return (
 
