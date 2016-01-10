@@ -1,4 +1,4 @@
-import { SET_SINGLE_IMAGE, SET_CORRECT_IMAGE,SET_WRONG_IMAGE } from '../actions';
+import { SET_SINGLE_IMAGE, SET_CORRECT_IMAGE, SET_WRONG_IMAGE } from '../actions';
 
 const initialState =
     {
@@ -7,7 +7,7 @@ const initialState =
             { value: [1, 2, 3], correct: false,  index: 0},
             { value: [1, 2, 3], correct: false,  index: 1},
             { value: [1, 2, 3], correct: false,  index: 2},
-            { value: [1, 2, 3], correct: false,  index: 2}
+            { value: [1, 2, 3], correct: false,  index: 3}
         ]
     }
 

@@ -13,6 +13,11 @@ class Scan extends Component {
         super(props);
     }
 
+    componentDidMount(){
+        console.log("Component mounted now")
+        this.props.setCorrectImage([3,3, 3])
+    }
+
     render() {
         const {correctImage, wrongImage} = this.props
         console.log("correct Image in Scan Container: " , correctImage)

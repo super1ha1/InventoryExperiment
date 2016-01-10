@@ -49,9 +49,9 @@ class ScanDisplay extends Component {
 const MovingImage = ({correctImage}) => (
     <div className="col-sm-6" style={{  height: '500px' , padding: '10px 10px 10px 20px'}}>
         <div className="row imageRow" id="movingRow" style={{position: 'relative' }}>
-            {correctImage.map( image => {
+            {correctImage.map( (image, i) => {
                 return (
-                    <img key={correctImage.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                    <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
                 )
             }) }
         </div>
@@ -74,33 +74,33 @@ class AnswerImage   extends Component {
                 <div style={{backgroundColor: '#ffffff', height: '100%',  padding: '10px 10px'}}>
 
                     <div className="row imageRow answerRow" id="row1">
-                        {firstRow.value.map(image => {
+                        {firstRow.value.map( (image, i) => {
                             return (
-                                <img key={firstRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
                             )
                         })}
                     </div>
 
                     <div className="row imageRow answerRow"  id="row2">
-                        {secondRow.value.map(image => {
+                        {secondRow.value.map( (image, i) => {
                             return (
-                                <img key={secondRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
                             )
                         })}
                     </div>
 
                     <div className="row imageRow answerRow" id="row3"  >
-                        {thirdRow.value.map(image => {
+                        {thirdRow.value.map((image, i) => {
                             return (
-                                <img key={thirdRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
                             )
                         })}
                     </div>
 
                     <div className="row imageRow answerRow" id="row4" >
-                        {forthRow.value.map(image => {
+                        {forthRow.value.map( (image, i) => {
                             return (
-                                <img key={forthRow.value.indexOf(image)} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
                             )
                         })}
                     </div>
