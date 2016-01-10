@@ -1,11 +1,15 @@
+import '../css/app.css';
+
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
-import '../css/app.css';
+import ReactTimeout from 'react-timeout'
+
 import { setCorrectImage, setWrongImage } from '../actions'
 import { ScanBody } from '../components/ScanBody.jsx'
+import * as ScanUtils from '../utils/ScanUtils'
 
 class Scan extends Component {
 
@@ -15,13 +19,16 @@ class Scan extends Component {
 
     componentDidMount(){
         console.log("Component mounted now")
-        this.props.setCorrectImage([3,3, 3])
-        this.props.setWrongImage(1, [3, 3, 3], true)
+        const { wrongImage} = this.props
+        ScanUtils.showOneScan(wrongImage)
+        this.props.setCorrectImage(ScanUtils.getCorrectImageArray())
+        this.props.setWrongImage({...ScanUtils.getCorrectAnswerArray()})
+        this.props.setWrongImage({...ScanUtils.getWrongAnswerArray()})
     }
 
     render() {
         const {correctImage, wrongImage} = this.props
-        console.log("correct Image in Scan Container: " , correctImage)
+        console.log("correct Image in Scan Container render: " , correctImage)
 
         return (
 

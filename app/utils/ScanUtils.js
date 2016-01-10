@@ -45,33 +45,56 @@ const AI_success_rate = 0.8;
 const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
 const SCAN_INTERVAL = SCAN_TIMEOUT + 1, TRUCK_INTERVAL = 30;
 var EASY;
-var currentFourAnswerArray = [123, 123, 123, 123];
+export var currentFourAnswerArray = [123, 123, 123, 123];
+
+
 
 export const AI_Initial_suggestion = generateAIInitialArray(TOTAL_TRIAL * AI_success_rate);
 export const AI_random = getRandomArray(TOTAL_TRIAL);
 export const AI_suggestion = sortArrayAccordingToRandom(AI_Initial_suggestion, AI_random);
 
 
-function showOneScan(){
-    var correctImage =  getRandomImage(currentFourAnswerArray) ;
-    var correctImagePosition = getRandomPositionForCorrectAnswer();
+var correctImage ;
+var correctImagePosition ;
+var wrongImage ;
+var wrongImagePosition ;
+
+function setFourAnswerArray(wrongImage){
+    currentFourAnswerArray = [];
+    for (var i = 0 ; i < wrongImage.length; i++){
+        let currentValueArray = wrongImage[i].value;
+        let number = 0 ;
+        let length = currentValueArray.length;
+        for ( var j = 0 ; j < length; j++){
+            number += currentValueArray[j] * Math.pow(10,length - 1 - j );
+        }
+        currentFourAnswerArray[i] = number
+    }
+}
+
+export function showOneScan(wrongImageObject){
+    setFourAnswerArray(wrongImageObject)
+
+    correctImage =  getRandomImage(currentFourAnswerArray) ;
+    correctImagePosition = getRandomPositionForCorrectAnswer();
     currentFourAnswerArray[correctImagePosition -1 ] = correctImage;
 
-    var wrongImage = getAnotherRandomImage(correctImage);
-    var wrongImagePosition = getAnotherRandomPosition(correctImagePosition);
+    wrongImage = getAnotherRandomImage(correctImage);
+    wrongImagePosition = getAnotherRandomPosition(correctImagePosition);
     currentFourAnswerArray[wrongImagePosition -1 ] = wrongImage;
     console.log(correctImage + " " + correctImagePosition + " " + wrongImage
         +  " " + wrongImagePosition );
     console.log(currentFourAnswerArray);
 
-    setDisplayMovingImage( correctImage);
-    setDisplayCorrectImage(correctImagePosition, correctImage);
-    setDisplayWrongImage(wrongImagePosition, wrongImage);
+    //setDisplayMovingImage( correctImage);
+    //setDisplayCorrectImage(correctImagePosition, correctImage);
+    //setDisplayWrongImage(wrongImagePosition, wrongImage);
+    //
+    //setCorrectImageClick(correctImagePosition);
+    //setWrongImageClick(correctImagePosition);
+    //
+    //setMoveMovingImage();
 
-    setCorrectImageClick(correctImagePosition);
-    setWrongImageClick(correctImagePosition);
-
-    setMoveMovingImage();
 
     function setDisplayWrongImage(wrongImagePosition,wrongImage ) {
         $("#image" + wrongImagePosition + "1").attr('src',  "img/easy/item" + getOrder(wrongImage, 3) + ".png");
@@ -132,10 +155,7 @@ function showOneScan(){
             .attr('src',  "img/easy/item" + getOrder(orderImage, 1) + ".png");
     }
 
-    function getOrder( decimalNumber, baseOf10InDecimal){
-        //Ex : number 1234, position 4 return 1, position 3 return 2
-        return parseInt(decimalNumber / Math.pow(10, baseOf10InDecimal -1 )) % 10;
-    }
+
 
     function getRandomImage(currentFourAnswerArray){
         var value = EASY_IMAGE_ARRAY[Math.floor((Math.random() * EASY_IMAGE_ARRAY.length) )];
@@ -165,6 +185,44 @@ function showOneScan(){
         return second;
     }
 
+}
+
+export function getCorrectImageArray(){
+    var array = [];
+    for( var i = 1; i <= 3; i++){
+        array[i-1] = getOrder(correctImage, 4 - i)
+    }
+    return array
+}
+
+export function getCorrectAnswerArray(){
+    var array = [];
+    for( var i = 1; i <= 3; i++){
+        array[i-1] = getOrder(correctImage, 4 - i)
+    }
+    return {
+        value: array,
+        index: correctImagePosition - 1,
+        correct: true
+    }
+}
+
+export function getWrongAnswerArray(){
+    var array = [];
+    for( var i = 1; i <= 3; i++){
+        array[i-1] = getOrder(wrongImage, 4 - i)
+    }
+    return {
+        value: array,
+        index: wrongImagePosition - 1,
+        correct: false
+    }
+}
+
+
+function getOrder( decimalNumber, baseOf10InDecimal){
+    //Ex : number 1234, position 4 return 1, position 3 return 2
+    return parseInt(decimalNumber / Math.pow(10, baseOf10InDecimal -1 )) % 10;
 }
 
 function getRandomArray(N){
