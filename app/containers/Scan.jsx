@@ -16,6 +16,7 @@ class Scan extends Component {
     componentDidMount(){
         console.log("Component mounted now")
         this.props.setCorrectImage([3,3, 3])
+        this.props.setWrongImage(1, [3, 3, 3], true)
     }
 
     render() {
