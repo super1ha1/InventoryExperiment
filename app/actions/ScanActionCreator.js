@@ -1,6 +1,7 @@
 export const SET_SINGLE_IMAGE = 'SET_SINGLE_IMAGE'
 export const SET_CORRECT_IMAGE = 'SET_CORRECT_IMAGE'
 export const SET_WRONG_IMAGE = 'SET_WRONG_IMAGE'
+export const SET_SCORE = 'SET_SCORE'
 
 
 export function setCorrectImage(value){
@@ -22,5 +23,12 @@ export function setWrongImage({index, value, correct}){
         index,
         value,
         correct
+    }
+}
+
+export function setScore(value){
+    return {
+        type: SET_SCORE,
+        value
     }
 }

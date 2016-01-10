@@ -39,7 +39,7 @@ const TOTAL_TRIAL = 20;
 const CORRECT_DISPATCH_POINT = 100;
 const CORRECT_SCAN_LOW_POINT = 10;
 const CORRECT_SCAN_HIGH_POINT = 20;
-const SCAN_TIMEOUT = 7;
+export const SCAN_TIMEOUT = 7;
 const AI_success_rate = 0.8;
 
 const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;

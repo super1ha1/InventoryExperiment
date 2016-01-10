@@ -14,14 +14,11 @@ import Immutable from 'immutable';
 export class ScanBody extends Component {
 
     render(){
-        const { correctImage, wrongImage} = this.props
+        const { correctImage, wrongImage, score} = this.props
         return ( <div className="col-sm-6 " style={{paddingTop: '20px'}}>
             <div className="row">
                 <div className="col-sm-3">
-                    <h4>Total Score:</h4>
-                </div>
-                <div className="col-sm-3">
-                    <pre id="score"  style={{backgroundColor: '#FFFFFF', height: '15px', marginTop:'5px' }}  ></pre>
+                    <h4>Total Score:  {score}</h4>
                 </div>
             </div>
             <ScanDisplay correctImage={correctImage} wrongImage={wrongImage} />
