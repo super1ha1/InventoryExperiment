@@ -17,7 +17,7 @@ export class ScanBody extends Component {
         const { correctImage, wrongImage, score, onImageClick} = this.props
         return ( <div className="col-sm-6 " style={{paddingTop: '20px'}}>
             <div className="row">
-                <div className="col-sm-3">
+                <div className="col-sm-6">
                     <h4>Total Score:  {score}</h4>
                 </div>
             </div>
@@ -58,7 +58,7 @@ const MovingImage = ({correctImage}) => (
 class AnswerImage   extends Component {
 
     render() {
-        const {wrongImage, onImageClick} = this.props
+        const {wrongImage} = this.props
         const firstRow = wrongImage[0]
         const secondRow = wrongImage[1]
         const thirdRow = wrongImage[2]
@@ -72,7 +72,8 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow" id="row1">
                         {firstRow.value.map( (image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage" onClick={onImageClick(image)}  />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                     className="eachImage" onClick={ this.props.onImageClick.bind(this, 0)}  />
                             )
                         })}
                     </div>
@@ -80,7 +81,8 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow"  id="row2">
                         {secondRow.value.map( (image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage" onClick={onImageClick(image)}   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                     className="eachImage" onClick={ this.props.onImageClick.bind(this, 1)}  />
                             )
                         })}
                     </div>
@@ -88,7 +90,8 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow" id="row3"  >
                         {thirdRow.value.map((image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage" onClick={onImageClick(image)}  />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                     className="eachImage"onClick={ this.props.onImageClick.bind(this, 2)}  />
                             )
                         })}
                     </div>
@@ -96,7 +99,8 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow" id="row4" >
                         {forthRow.value.map( (image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"  onClick={onImageClick(image)} />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                     className="eachImage"  onClick={ this.props.onImageClick.bind(this, 3)}  />
                             )
                         })}
                     </div>

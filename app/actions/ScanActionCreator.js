@@ -27,6 +27,7 @@ export function setWrongImage({index, value, correct}){
 }
 
 export function setScore(value){
+    console.log("Set score here: value ", value)
     return {
         type: SET_SCORE,
         value

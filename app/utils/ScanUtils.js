@@ -86,9 +86,9 @@ export function showOneScan(wrongImageObject){
     wrongImage = getAnotherRandomImage(correctImage);
     wrongImagePosition = getAnotherRandomPosition(correctImagePosition);
     currentFourAnswerArray[wrongImagePosition -1 ] = wrongImage;
-    console.log(correctImage + " " + correctImagePosition + " " + wrongImage
-        +  " " + wrongImagePosition );
-    console.log(currentFourAnswerArray);
+
+    //console.log(correctImage + " " + correctImagePosition + " " + wrongImage +  " " + wrongImagePosition );
+    //console.log(currentFourAnswerArray);
 
     //setDisplayMovingImage( correctImage);
     //setDisplayCorrectImage(correctImagePosition, correctImage);

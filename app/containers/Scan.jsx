@@ -9,6 +9,9 @@ import ReactTimeout from 'react-timeout'
 
 import { setCorrectImage, setWrongImage, setScore } from '../actions'
 import { ScanBody } from '../components/ScanBody.jsx'
+import { Header } from '../components/Header.jsx'
+import { ScanResult } from '../components/ScanResult.jsx'
+import { TruckAlert } from '../components/TruckAlert.jsx'
 import * as ScanUtils from '../utils/ScanUtils'
 
 @ReactTimeout
@@ -25,7 +28,6 @@ class Scan extends Component {
         this.showOneScan = this.showOneScan.bind(this)
         this.updateRound = this.updateRound.bind(this)
         this.intervalShowScan = this.intervalShowScan.bind(this)
-        this.onImageClick = this.onImageClick.bind(this)
     }
 
     updateRound(){
@@ -34,16 +36,22 @@ class Scan extends Component {
         })
     }
 
-    onImageClick(image){
+    onImageClick(index){
+        console.log("On Image click: ", index)
+
         if(this.state.timeOut){
             return;
         }
-        const {score} = this.props
-        if( image.correct){
-            setScore(score + ScanUtils.CORRECT_SCAN_LOW_POINT)
+        const {score, wrongImage } = this.props
+
+        console.log("Image click ", wrongImage[index], " correct ",  wrongImage[index].correct)
+
+        if(  wrongImage[index].correct){
+            this.props.setScore(score + ScanUtils.CORRECT_SCAN_LOW_POINT)
             this.setState({
                 scanResult: ScanUtils.CORRECT
             })
+            return
         }
         this.setState({
             scanResult: ScanUtils.INCORRECT
@@ -55,6 +63,10 @@ class Scan extends Component {
         const { setInterval } = this.props.reactTimeout
         const id = setInterval(() => {
            this.showOneScan()
+            if(this.state.round === 3){
+                console.log("Clear interval here")
+                clearInterval(id)
+            }
         }, 5000)
     }
 
@@ -80,7 +92,7 @@ class Scan extends Component {
     }
 
     render() {
-        const {correctImage, wrongImage, score, onImageClick} = this.props
+        const {correctImage, wrongImage, score} = this.props
 
         return (
 
@@ -95,7 +107,7 @@ class Scan extends Component {
                     </div>
 
                     <ScanBody correctImage={correctImage} wrongImage={wrongImage} score={score}
-                        onImageClick={this.onImageClick}
+                        onImageClick={this.onImageClick.bind(this)}
                     />
 
                 </div>
@@ -104,84 +116,6 @@ class Scan extends Component {
         )
     }
 }
-
-const Header = ({}) => (
-    <div className="row">
-        <div className="col-sm-6 text-center">
-            <h4 className="text-nowrap">Automated Warehouse Management System</h4>
-        </div>
-        <script type="text/ng-template" id="myModalContent.html">
-            <div className="modal-header">
-                <h3 className="modal-title">I'm a modal!</h3>
-            </div>
-            <div className="modal-body">
-                <ul>
-                    <li ng-repeat="item in items">
-                        <a ng-click="selected.item = item"> item </a>
-                    </li>
-                </ul>
-                Selected:
-                <b>selected item </b>
-            </div>
-            <div className="modal-footer">
-                <button className="btn btn-primary" ng-click="ok()">OK</button>
-                <button className="btn btn-warning" ng-click="cancel()">Cancel</button>
-            </div>
-        </script>
-        <div className="col-sm-6 ">
-            <div className="row">
-                <div className="col-sm-2">
-                    <img
-                        className="image"
-                         src={'http://52.25.173.78/inventory/app/img/scan.png'}
-                         style={{width: '80px' , height: '80px' ,  paddingTop: '10px'}}
-                        />
-                </div>
-                <div className="col-sm-2 col-sm-offset-1">
-                    <img
-                        className="image"
-                         src={'http://52.25.173.78/inventory/app/img/truck.png'}
-                         style={{width: '100px' , height: '100px'}}
-                        />
-                </div>
-            </div>
-        </div>
-    </div>
-)
-
-const TruckAlert = ({}) => (
-    <div className="row">
-        <div className="col-sm-12">
-            <div className="span7 text-center">
-                <h4 className="text-center">Truck Alert</h4>
-                        <pre id="alarm" className="text-danger text-uppercase"
-                             style={{backgroundColor: '#FFFFFF', fontSize: '20px',
-                         height: '50px'}}  ></pre>
-                <br/>
-                <button className="btn btn-success mce-btn-large" ng-click="open()">Dispatch Truck</button>
-            </div>
-        </div>
-    </div>
-)
-
-const ScanResult = ({scanResult}) => (
-    <div className="row">
-        <div className="col-sm-12">
-            <div className="span7 text-center">{
-                (scanResult) => {
-                    if(scanResult === ScanUtils.CORRECT){
-                        return <h1 style={{marginTop: '80px', color: ScanUtils.CORRECT_COLOR}} id="resultScan" className="text-danger text-uppercase">{scanResult}</h1>
-                    }
-                    else
-                        return <h1 style={{marginTop: '80px', color:'red'}} id="resultScan" className="text-danger text-uppercase">{scanResult}</h1>
-                }
-            }
-
-            </div>
-        </div>
-    </div>
-)
-
 
 function mapStateToProps(state, ownProps) {
     return {
