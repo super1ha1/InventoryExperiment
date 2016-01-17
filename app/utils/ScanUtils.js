@@ -37,7 +37,7 @@ const MAX_TRUCK_FULL = 22;
 const FULL_TO_OVERLOAD = 10;
 const TOTAL_TRIAL = 20;
 const CORRECT_DISPATCH_POINT = 100;
-const CORRECT_SCAN_LOW_POINT = 10;
+export const CORRECT_SCAN_LOW_POINT = 10;
 const CORRECT_SCAN_HIGH_POINT = 20;
 export const SCAN_TIMEOUT = 7;
 const AI_success_rate = 0.8;
@@ -47,6 +47,10 @@ const SCAN_INTERVAL = SCAN_TIMEOUT + 1, TRUCK_INTERVAL = 30;
 var EASY;
 export var currentFourAnswerArray = [123, 123, 123, 123];
 
+export const CORRECT='correct'
+export const INCORRECT ='incorrect'
+export const TIMEOUT='timeout'
+export const CORRECT_COLOR='#00b050'
 
 
 export const AI_Initial_suggestion = generateAIInitialArray(TOTAL_TRIAL * AI_success_rate);

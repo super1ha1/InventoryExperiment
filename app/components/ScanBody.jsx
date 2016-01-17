@@ -14,14 +14,14 @@ import Immutable from 'immutable';
 export class ScanBody extends Component {
 
     render(){
-        const { correctImage, wrongImage, score} = this.props
+        const { correctImage, wrongImage, score, onImageClick} = this.props
         return ( <div className="col-sm-6 " style={{paddingTop: '20px'}}>
             <div className="row">
                 <div className="col-sm-3">
                     <h4>Total Score:  {score}</h4>
                 </div>
             </div>
-            <ScanDisplay correctImage={correctImage} wrongImage={wrongImage} />
+            <ScanDisplay correctImage={correctImage} wrongImage={wrongImage} onImageClick={onImageClick} />
         </div>)
     }
 }
@@ -29,13 +29,13 @@ export class ScanBody extends Component {
 class ScanDisplay extends Component {
 
     render (){
-        const {correctImage, wrongImage} = this.props
+        const {correctImage, wrongImage, onImageClick} = this.props
         return (
             <div className="row" style={{paddingTop: '20px'}}>
                 <div className="col-sm-12 ">
                     <div className="row" style={{backgroundColor: '#0a000a' }}>
                         <MovingImage  correctImage={ correctImage }/>
-                        <AnswerImage wrongImage = {wrongImage} />
+                        <AnswerImage wrongImage = {wrongImage} onImageClick={onImageClick} />
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@ const MovingImage = ({correctImage}) => (
 class AnswerImage   extends Component {
 
     render() {
-        const {wrongImage} = this.props
+        const {wrongImage, onImageClick} = this.props
         const firstRow = wrongImage[0]
         const secondRow = wrongImage[1]
         const thirdRow = wrongImage[2]
@@ -72,7 +72,7 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow" id="row1">
                         {firstRow.value.map( (image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage" onClick={onImageClick(image)}  />
                             )
                         })}
                     </div>
@@ -80,7 +80,7 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow"  id="row2">
                         {secondRow.value.map( (image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage" onClick={onImageClick(image)}   />
                             )
                         })}
                     </div>
@@ -88,7 +88,7 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow" id="row3"  >
                         {thirdRow.value.map((image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage" onClick={onImageClick(image)}  />
                             )
                         })}
                     </div>
@@ -96,7 +96,7 @@ class AnswerImage   extends Component {
                     <div className="row imageRow answerRow" id="row4" >
                         {forthRow.value.map( (image, i) => {
                             return (
-                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                                <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"  onClick={onImageClick(image)} />
                             )
                         })}
                     </div>

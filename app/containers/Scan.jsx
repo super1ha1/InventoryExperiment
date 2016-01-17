@@ -18,17 +18,37 @@ class Scan extends Component {
         super(props);
         this.state = {
             recommended: false,
-            round : 1
+            round : 1,
+            scanResult: '',
+            timeOut: false
         };
         this.showOneScan = this.showOneScan.bind(this)
         this.updateRound = this.updateRound.bind(this)
         this.intervalShowScan = this.intervalShowScan.bind(this)
+        this.onImageClick = this.onImageClick.bind(this)
     }
 
     updateRound(){
         this.setState({
             round : this.state.round + 1
         })
+    }
+
+    onImageClick(image){
+        if(this.state.timeOut){
+            return;
+        }
+        const {score} = this.props
+        if( image.correct){
+            setScore(score + ScanUtils.CORRECT_SCAN_LOW_POINT)
+            this.setState({
+                scanResult: ScanUtils.CORRECT
+            })
+        }
+        this.setState({
+            scanResult: ScanUtils.INCORRECT
+        })
+
     }
 
     intervalShowScan(){
@@ -60,7 +80,7 @@ class Scan extends Component {
     }
 
     render() {
-        const {correctImage, wrongImage, score} = this.props
+        const {correctImage, wrongImage, score, onImageClick} = this.props
 
         return (
 
@@ -71,10 +91,12 @@ class Scan extends Component {
 
                     <div className="col-sm-6">
                         <TruckAlert />
-                        <ScanResult />
+                        <ScanResult scanResult={this.state.scanResult} />
                     </div>
 
-                    <ScanBody correctImage={correctImage} wrongImage={wrongImage} score={score} />
+                    <ScanBody correctImage={correctImage} wrongImage={wrongImage} score={score}
+                        onImageClick={this.onImageClick}
+                    />
 
                 </div>
             </div>
@@ -142,11 +164,19 @@ const TruckAlert = ({}) => (
     </div>
 )
 
-const ScanResult = ({}) => (
+const ScanResult = ({scanResult}) => (
     <div className="row">
         <div className="col-sm-12">
-            <div className="span7 text-center">
-                <h1 id="resultScan" className="text-danger text-uppercase" style={{marginTop: '80px'}}></h1>
+            <div className="span7 text-center">{
+                (scanResult) => {
+                    if(scanResult === ScanUtils.CORRECT){
+                        return <h1 style={{marginTop: '80px', color: ScanUtils.CORRECT_COLOR}} id="resultScan" className="text-danger text-uppercase">{scanResult}</h1>
+                    }
+                    else
+                        return <h1 style={{marginTop: '80px', color:'red'}} id="resultScan" className="text-danger text-uppercase">{scanResult}</h1>
+                }
+            }
+
             </div>
         </div>
     </div>
