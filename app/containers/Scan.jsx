@@ -49,12 +49,12 @@ class Scan extends Component {
         if(  wrongImage[index].correct){
             this.props.setScore(score + ScanUtils.CORRECT_SCAN_LOW_POINT)
             this.setState({
-                scanResult: ScanUtils.CORRECT
+                scanResult: 'correct'
             })
             return
         }
         this.setState({
-            scanResult: ScanUtils.INCORRECT
+            scanResult: 'incorrect'
         })
 
     }
@@ -62,7 +62,7 @@ class Scan extends Component {
     intervalShowScan(){
         const { setInterval } = this.props.reactTimeout
         const id = setInterval(() => {
-           this.showOneScan()
+            this.showOneScan()
             if(this.state.round === 3){
                 console.log("Clear interval here")
                 clearInterval(id)
@@ -85,6 +85,7 @@ class Scan extends Component {
         }, ScanUtils.SCAN_TIMEOUT * 1000 )
 
         console.log(`${this.state.round} - begin`)
+
         ScanUtils.showOneScan(wrongImage)
         this.props.setCorrectImage(ScanUtils.getCorrectImageArray())
         this.props.setWrongImage({...ScanUtils.getCorrectAnswerArray()})
