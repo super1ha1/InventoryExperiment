@@ -35,7 +35,7 @@ var EASY_IMAGE_ARRAY = [
 const MIN_TRUCK_FULL = 12;
 const MAX_TRUCK_FULL = 22;
 const FULL_TO_OVERLOAD = 10;
-const TOTAL_TRIAL = 20;
+export const TOTAL_SCAN_TRIAL = 20;
 const CORRECT_DISPATCH_POINT = 100;
 export const CORRECT_SCAN_LOW_POINT = 10;
 const CORRECT_SCAN_HIGH_POINT = 20;
@@ -43,7 +43,8 @@ export const SCAN_TIMEOUT = 7;
 const AI_success_rate = 0.8;
 
 const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
-const SCAN_INTERVAL = SCAN_TIMEOUT + 1, TRUCK_INTERVAL = 30;
+export const SCAN_INTERVAL = SCAN_TIMEOUT + 1, TRUCK_INTERVAL = 30;
+export  const SCAN_RESULT_INTERVAL = 1
 var EASY;
 export var currentFourAnswerArray = [123, 123, 123, 123];
 
@@ -53,8 +54,8 @@ export const TIMEOUT='timeout'
 export const CORRECT_COLOR='#00b050'
 
 
-export const AI_Initial_suggestion = generateAIInitialArray(TOTAL_TRIAL * AI_success_rate);
-export const AI_random = getRandomArray(TOTAL_TRIAL);
+export const AI_Initial_suggestion = generateAIInitialArray(TOTAL_SCAN_TRIAL * AI_success_rate);
+export const AI_random = getRandomArray(TOTAL_SCAN_TRIAL);
 export const AI_suggestion = sortArrayAccordingToRandom(AI_Initial_suggestion, AI_random);
 
 
@@ -239,8 +240,8 @@ function getRandomArray(N){
 
 function generateAIInitialArray(correctGuess){
     var array = [];
-    var each_wrong_alarm = (TOTAL_TRIAL - correctGuess)/2;
-    for ( var i = 0 ; i < TOTAL_TRIAL; i ++){
+    var each_wrong_alarm = (TOTAL_SCAN_TRIAL - correctGuess)/2;
+    for (var i = 0 ; i < TOTAL_SCAN_TRIAL; i ++){
         if(i < each_wrong_alarm)
             array[i] = AI_FALSE_ALARM;
         else if( i < 2 * each_wrong_alarm)

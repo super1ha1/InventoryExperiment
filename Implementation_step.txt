@@ -3,3 +3,7 @@
 -test : image click show score ok
 
 2) display result  of current scan
+
+3) handle time out and already clicked
+
+4) suggest to have a show/unshow boolean variable for easy to when to switch to new round
