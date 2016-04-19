@@ -26,7 +26,11 @@ class Scan extends Component {
             round : 0,
             scanResult: '',
             timeOut: false,
-            currentPage: 'scan'
+            currentPage: 'scan',
+            truckStartTime: 0,
+            truckEndTime: 0,
+            truckAlarmType: 0,
+            truckAlarmTime: 0,
         };
 
         this.showOneScan = this.showOneScan.bind(this)

@@ -8,11 +8,12 @@ import '../css/app.css';
 import _ from 'lodash';
 import Immutable from 'immutable';
 const IMAGE_URL = 'https://a651b92a590c93dd85474fb426c27428fdac9155.googledrive.com/host/0BziLHHDUzLXdSGMwYnI5VjNTNUU/';
+// truck width = 5.8 cm, height = 7.8 cm
 
 export class TruckBody extends Component {
 
     render(){
-        const { } = this.props
+        const {truckStartTime,truckEndTime, truckAlarmType, truckAlarmTime } = this.props
         return (
            <div >
                <div className="col-sm-6 " style={{paddingTop: '20px'}}>
@@ -21,9 +22,9 @@ export class TruckBody extends Component {
 
                            <div className="row">
                                <div className="col-sm-6">
-                                   <div style={{height: '200px', width: '150px',  backgroundColor: '#fce3ac'}}>
+                                   <div style={{height: '268px', width: '200px',  backgroundColor: '#fff', border:'1px solid black'}}>
                                        <div id="animateDiv"
-                                            style={{backgroundColor: 'red', position: 'absolute', bottom: '0px', height: '50px', width: '150px'}}>
+                                            style={{backgroundColor: '#0070c0', position: 'absolute', bottom: '0px', height: '50px', width: '200px'}}>
 
                                        </div>
                                    </div>
@@ -31,7 +32,7 @@ export class TruckBody extends Component {
                                </div>
                            </div>
 
-                           <div className="row"  style={{marginTop: '-20px' , left: '-300px', position: 'relative'}}>
+                           <div className="row"  style={{marginTop: '0px' , left: '15px', position: 'relative'}}>
                                <div className="col-sm-1 col-sm-offset-1">
                                    <img src={IMAGE_URL + 'wheel.png'} />
                                </div>
