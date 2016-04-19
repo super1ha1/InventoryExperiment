@@ -12,6 +12,7 @@ import { ScanBody } from '../components/ScanBody.jsx'
 import { Header } from '../components/Header.jsx'
 import { ScanResult } from '../components/ScanResult.jsx'
 import { TruckAlert } from '../components/TruckAlert.jsx'
+import { TruckBody } from '../components/TruckBody.jsx'
 import * as ScanUtils from '../utils/ScanUtils'
 
 @ReactTimeout
@@ -24,7 +25,8 @@ class Scan extends Component {
             clicked: false,
             round : 0,
             scanResult: '',
-            timeOut: false
+            timeOut: false,
+            currentPage: 'scan'
         };
 
         this.showOneScan = this.showOneScan.bind(this)
@@ -36,6 +38,9 @@ class Scan extends Component {
 
     componentDidMount(){
         console.log("Component mounted now")
+        console.log('scan AI init: ', ScanUtils.AI_Initial_suggestion)
+        console.log('scan AI random: ', ScanUtils.AI_random)
+        console.log('scan AI suggest: ', ScanUtils.AI_suggestion)
         this.intervalShowScan()
     }
 
@@ -129,7 +134,14 @@ class Scan extends Component {
             clicked: true,
             show:false
         })
+
         this.resetScanResult()
+    }
+
+    onNavigationClick(page){
+        this.setState({
+            currentPage:page
+        })
     }
 
     render() {
@@ -138,7 +150,9 @@ class Scan extends Component {
         return (
 
             <div className="container">
-                <Header />
+                <Header currentPage={this.state.currentPage}
+                        onNavigationClick={this.onNavigationClick.bind(this)}
+                />
 
                 <div className="row">
 
@@ -147,9 +161,15 @@ class Scan extends Component {
                         <ScanResult scanResult={this.state.scanResult} />
                     </div>
 
-                    <ScanBody correctImage={correctImage} wrongImage={wrongImage} score={score}
-                        onImageClick={this.onImageClick.bind(this)} show={this.state.show}
-                    />
+                    {(() => {
+                       if(this.state.currentPage === 'scan'){
+                           return (
+                               <ScanBody correctImage={correctImage} wrongImage={wrongImage} score={score}
+                                              onImageClick={this.onImageClick.bind(this)} show={this.state.show}
+                               />)
+                       }
+                        return (<TruckBody />)
+                    })()}
 
                 </div>
             </div>
