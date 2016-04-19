@@ -14,6 +14,7 @@ import { ScanResult } from '../components/ScanResult.jsx'
 import { TruckAlert } from '../components/TruckAlert.jsx'
 import { TruckBody } from '../components/TruckBody.jsx'
 import * as ScanUtils from '../utils/ScanUtils'
+import moment from 'moment'
 
 @ReactTimeout
 class Scan extends Component {
@@ -31,6 +32,9 @@ class Scan extends Component {
             truckEndTime: 0,
             truckAlarmType: 0,
             truckAlarmTime: 0,
+            currentTruckPercent: 0,
+            truckFull: false,
+            timeLeft: 0,
         };
 
         this.showOneScan = this.showOneScan.bind(this)
@@ -38,16 +42,78 @@ class Scan extends Component {
         this.intervalShowScan = this.intervalShowScan.bind(this)
         this.resetScanResult = this.resetScanResult.bind(this)
         this.resetForNewRound = this.resetForNewRound.bind(this)
+        this.startTruckTrial = this.startTruckTrial.bind(this)
     }
 
     componentDidMount(){
         console.log("Component mounted now")
-        console.log('scan AI init: ', ScanUtils.AI_Initial_suggestion)
-        console.log('scan AI random: ', ScanUtils.AI_random)
-        console.log('scan AI suggest: ', ScanUtils.AI_suggestion)
         this.intervalShowScan()
+        this.startTruckTrial()
     }
 
+    onNavigationClick(page){
+        const currentTime = moment().unix()
+        const percent = (currentTime - this.state.truckStartTime) /(this.state.truckEndTime - this.state.truckStartTime)
+        const timeLeft = this.state.truckEndTime - currentTime;
+        var full;
+        if(timeLeft < -10){
+            //outdated > next round
+            full = true
+        }else if(timeLeft < 0){
+            //still can dispatch
+            full = true
+        }else if(timeLeft > 0){
+            //have not full yet
+            full = false
+        }
+
+        console.log('on Navigation: ', percent, full, timeLeft)
+        this.setState({
+            currentPage:page,
+            currentTruckPercent: percent,
+            truckFull: full,
+            timeLeft: timeLeft
+        })
+    }
+
+
+    startTruckTrial(){
+        console.log('truck AI suggest: ', ScanUtils.AI_suggestion)
+        console.log('truck interval: ', ScanUtils.AI_TRUCK_INTERVAL_ARRAY)
+
+        const startTime = moment().unix()
+        const truckPeriod = ScanUtils.AI_TRUCK_INTERVAL_ARRAY[this.state.round]
+        const endTime = startTime + truckPeriod
+        const alarmType = ScanUtils.AI_suggestion[this.state.round]
+
+        let alarmTime;
+        switch (alarmType){
+            case ScanUtils.AI_CORRECT:
+                alarmTime = endTime
+                break;
+
+            case ScanUtils.AI_FALSE_ALARM:
+                alarmTime = startTime + Math.floor(truckPeriod/2)
+                break;
+
+            case ScanUtils.AI_MISS_ALARM:
+                alarmTime = 0
+                break;
+
+            default:
+                break;
+        }
+
+        this.setState({
+            truckAlarmType: alarmType,
+            truckStartTime: startTime,
+            truckEndTime: endTime,
+            truckAlarmTime: alarmTime
+        })
+
+        console.log('state after set truck detail, ',  alarmType, startTime, endTime, alarmTime)
+
+    }
     showOneScan(){
         const { setTimeout } = this.props.reactTimeout
         const { wrongImage} = this.props
@@ -142,19 +208,13 @@ class Scan extends Component {
         this.resetScanResult()
     }
 
-    onNavigationClick(page){
-        this.setState({
-            currentPage:page
-        })
-    }
-
     render() {
         const {correctImage, wrongImage, score} = this.props
 
         return (
 
             <div className="container">
-                <Header currentPage={this.state.currentPage}
+                <Header  {...this.state}
                         onNavigationClick={this.onNavigationClick.bind(this)}
                 />
 
@@ -182,7 +242,9 @@ class Scan extends Component {
                                               onImageClick={this.onImageClick.bind(this)} show={this.state.show}
                                />)
                        }
-                        return (<TruckBody />)
+                        return (<TruckBody  {...this.state}
+
+                                />)
                     })()}
                 </div>
             </div>

@@ -42,7 +42,7 @@ const CORRECT_SCAN_HIGH_POINT = 20;
 export const SCAN_TIMEOUT = 7;
 const AI_success_rate = 0.8;
 
-const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
+export const AI_CORRECT = 0, AI_FALSE_ALARM = 1, AI_MISS_ALARM = 2;
 export const SCAN_INTERVAL = SCAN_TIMEOUT + 1, TRUCK_INTERVAL = 30;
 export  const SCAN_RESULT_INTERVAL = 1
 var EASY;
@@ -58,11 +58,24 @@ export const AI_Initial_suggestion = generateAIInitialArray(TOTAL_SCAN_TRIAL * A
 export const AI_random = getRandomArray(TOTAL_SCAN_TRIAL);
 export const AI_suggestion = sortArrayAccordingToRandom(AI_Initial_suggestion, AI_random);
 
+export const AI_TRUCK_INTERVAL_ARRAY = getTruckInterval(TOTAL_SCAN_TRIAL);
 
 var correctImage ;
 var correctImagePosition ;
 var wrongImage ;
 var wrongImagePosition ;
+
+function getTruckInterval(TOTAL_SCAN_TRIAL) {
+    var array = []
+    for (var i = 0 ; i < TOTAL_SCAN_TRIAL; i++){
+        array.push(getRandomIntInclusive(MIN_TRUCK_FULL, MAX_TRUCK_FULL))
+    }
+    return array;
+}
+
+function getRandomIntInclusive(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function setFourAnswerArray(wrongImage){
     currentFourAnswerArray = [];
