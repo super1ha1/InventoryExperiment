@@ -169,9 +169,6 @@ class Scan extends Component {
                             }
                             return (null)
                         })()}
-
-
-
                     </div>
 
                     {(() => {
@@ -183,7 +180,6 @@ class Scan extends Component {
                        }
                         return (<TruckBody />)
                     })()}
-
                 </div>
             </div>
 

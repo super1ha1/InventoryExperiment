@@ -11,6 +11,8 @@ import '../css/app.css';
 import _ from 'lodash';
 import Immutable from 'immutable';
 
+const IMAGE_URL = 'https://a651b92a590c93dd85474fb426c27428fdac9155.googledrive.com/host/0BziLHHDUzLXdSGMwYnI5VjNTNUU/item';
+
 export class ScanBody extends Component {
 
     render(){
@@ -49,7 +51,7 @@ const MovingImage = ({correctImage, show}) => (
             <div  className="row imageRow" style={{  visibility: show ? 'visible' : 'hidden'}}>
                 {correctImage.map( (image, i) => {
                     return (
-                        <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}  className="eachImage"   />
+                        <img key={i} src={IMAGE_URL + image + '.png'}  className="eachImage"   />
                     )
                 }) }
             </div>
@@ -74,7 +76,7 @@ class AnswerImage  extends Component {
                         <div className="row imageRow answerRow" id="row1">
                             {firstRow.value.map( (image, i) => {
                                 return (
-                                    <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                    <img key={i} src={IMAGE_URL + image + '.png'}
                                          className="eachImage" onClick={ this.props.onImageClick.bind(this, 0)}  />
                                 )
                             })}
@@ -83,7 +85,7 @@ class AnswerImage  extends Component {
                         <div className="row imageRow answerRow"  id="row2">
                             {secondRow.value.map( (image, i) => {
                                 return (
-                                    <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                    <img key={i} src={IMAGE_URL + image + '.png'}
                                          className="eachImage" onClick={ this.props.onImageClick.bind(this, 1)}  />
                                 )
                             })}
@@ -92,7 +94,7 @@ class AnswerImage  extends Component {
                         <div className="row imageRow answerRow" id="row3"  >
                             {thirdRow.value.map((image, i) => {
                                 return (
-                                    <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                    <img key={i} src={IMAGE_URL + image + '.png'}
                                          className="eachImage"onClick={ this.props.onImageClick.bind(this, 2)}  />
                                 )
                             })}
@@ -101,7 +103,7 @@ class AnswerImage  extends Component {
                         <div className="row imageRow answerRow" id="row4" >
                             {forthRow.value.map( (image, i) => {
                                 return (
-                                    <img key={i} src={'http://52.25.173.78/inventory/app/img/easy/item' + image + '.png'}
+                                    <img key={i} src={IMAGE_URL + image + '.png'}
                                          className="eachImage"  onClick={ this.props.onImageClick.bind(this, 3)}  />
                                 )
                             })}

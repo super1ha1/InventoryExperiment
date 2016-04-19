@@ -9,6 +9,9 @@ import '../css/app.css';
 import _ from 'lodash';
 import Immutable from 'immutable';
 
+const IMAGE_URL = 'https://a651b92a590c93dd85474fb426c27428fdac9155.googledrive.com/host/0BziLHHDUzLXdSGMwYnI5VjNTNUU/';
+
+
 export class Header  extends Component {
     render(){
 
@@ -44,7 +47,7 @@ export class Header  extends Component {
                         <div className="col-sm-2">
                             <img
                                 className="image"
-                                src={'http://52.25.173.78/inventory/app/img/scan.png'}
+                                src={IMAGE_URL + 'scan.png'}
                                 style={{width: '80px' , height: '80px' ,  paddingTop: '10px', border : (currentPage ==='scan' ? '3px solid #00b050' : '' ) }}
                                 onClick={this.props.onNavigationClick.bind(this, 'scan')}
                             />
@@ -52,7 +55,7 @@ export class Header  extends Component {
                         <div className="col-sm-2 col-sm-offset-1">
                             <img
                                 className="image"
-                                src={'http://52.25.173.78/inventory/app/img/truck.png'}
+                                src={IMAGE_URL + 'truck.png'}
                                 style={{width: '100px' , height: '100px', border : (currentPage ==='truck' ? '3px solid #00b050' : '' )}}
                                 onClick={this.props.onNavigationClick.bind(this, 'truck')}
                             />
