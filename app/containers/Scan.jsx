@@ -157,8 +157,21 @@ class Scan extends Component {
                 <div className="row">
 
                     <div className="col-sm-6">
-                        <TruckAlert />
-                        <ScanResult scanResult={this.state.scanResult} />
+
+                        {(() => {
+                            if(this.state.currentPage === 'scan'){
+                                return (
+                                    <div>
+                                        <TruckAlert />
+                                        <ScanResult scanResult={this.state.scanResult} />
+                                        </div>
+                                )
+                            }
+                            return (null)
+                        })()}
+
+
+
                     </div>
 
                     {(() => {
