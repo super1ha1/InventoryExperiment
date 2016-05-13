@@ -13,7 +13,7 @@ import Immutable from 'immutable';
 export  class TruckAlert extends  Component {
 
     render(){
-        const {showTruckAlert} = this.props
+        const {showTruckAlert, dispatchATruck} = this.props
         return (
             <div className="row">
                 <div className="col-sm-12">
@@ -25,7 +25,7 @@ export  class TruckAlert extends  Component {
                                 <p style={{  visibility: showTruckAlert ? 'visible' : 'hidden'}}>Truck is full</p>
                             </pre>
                         <br/>
-                        <button className="btn btn-success mce-btn-large" ng-click="open()">Dispatch Truck</button>
+                        <button className="btn btn-success mce-btn-large" onClick={dispatchATruck}>Dispatch Truck</button>
                     </div>
                 </div>
             </div>

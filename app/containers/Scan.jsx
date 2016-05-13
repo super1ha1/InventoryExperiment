@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import ReactTimeout from 'react-timeout'
 
-import { setCorrectImage, setWrongImage, setScore } from '../actions'
+import { setCorrectImage, setWrongImage, setScore, setScoreRecord } from '../actions'
 import { ScanBody } from '../components/ScanBody.jsx'
 import { Header } from '../components/Header.jsx'
 import { ScanResult } from '../components/ScanResult.jsx'
@@ -31,6 +31,8 @@ class Scan extends Component {
             scanResult: '',
             timeOut: false,
             currentPage: 'scan',
+            scanScore: 0,
+            truckScore: 0,
 
                 truckStartTime: 0,
                 truckEndTime: 0,
@@ -41,28 +43,36 @@ class Scan extends Component {
                 timeLeft: 0,
                 isClickedDispatch: false,
                 showTruckAlert: false,
-                showRatingForm: true,
-                rateValue: -1
+                showRatingForm: false,
+                showScoreBoard: false,
+                rateValue: -1,
+                truckResult: ''
         };
 
         //scan
         this.showOneScan = this.showOneScan.bind(this)
         this.updateWhenTimeOut = this.updateWhenTimeOut.bind(this)
-        this.intervalShowScan = this.intervalShowScan.bind(this)
+        this.startScanRound = this.startScanRound.bind(this)
         this.resetScanResult = this.resetScanResult.bind(this)
         this.resetForNewRound = this.resetForNewRound.bind(this)
 
         //truck
         this.startTruckTrial = this.startTruckTrial.bind(this)
-        this.resetTruckForNewRound = this.resetTruckForNewRound.bind(this)
+        this.resetTruckForNewTrial = this.resetTruckForNewTrial.bind(this)
         this.updateTruckWhenExpired = this.updateTruckWhenExpired.bind(this)
         this.displayTruckAlert = this.displayTruckAlert.bind(this)
         this.setARating = this.setARating.bind(this)
+        this.dispatchATruck = this.dispatchATruck.bind(this)
+
+        //score
+        this.getTotalScanScoreUpToNow = this.getTotalScanScoreUpToNow.bind(this)
+        this.getTotalTruckScoreUpToNow = this.getTotalTruckScoreUpToNow.bind(this)
+        this.saveScoreRecordToState = this.saveScoreRecordToState.bind(this)
     }
 
     componentDidMount(){
         console.log("Component mounted now")
-        this.intervalShowScan()
+        this.startScanRound()
         this.startTruckTrial()
     }
 
@@ -110,19 +120,25 @@ class Scan extends Component {
         this.props.setWrongImage({...ScanUtils.getWrongAnswerArray()})
     }
 
-    intervalShowScan(){
-        const { setInterval } = this.props.reactTimeout
-        const id = setInterval(() => {
-            this.showOneScan()
-            if(this.state.round === ScanUtils.TOTAL_TRIAL){
-                console.log("Clear interval here")
-                clearInterval(id)
-            }
-        }, ScanUtils.SCAN_INTERVAL * 1000)
+    startScanRound(){
+        //const { setInterval } = this.props.reactTimeout
+        //const id = setInterval(() => {
+        //    this.showOneScan()
+        //    if(this.state.round === ScanUtils.TOTAL_TRIAL){
+        //        console.log("Clear interval here")
+        //        clearInterval(id)
+        //    }
+        //}, ScanUtils.SCAN_INTERVAL * 1000)
+        if(this.state.showScoreBoard){
+            console.log('already show ending form, not continue scan')
+            return
+        }
+        this.showOneScan()
+
     }
 
     updateWhenTimeOut(){
-        if( this.state.clicked){
+        if(this.state.showScoreBoard ||  this.state.clicked){
             return
         }
 
@@ -141,6 +157,16 @@ class Scan extends Component {
             this.setState({
                 scanResult: ''
             })
+
+            setTimeout( () => {
+                //show a new round of scan
+                if(this.state.clicked) console.log('start new scan on image click')
+                else console.log('start new scan on time out')
+
+                this.showOneScan()
+            }, 1 * 1000)
+
+
         }, ScanUtils.SCAN_RESULT_INTERVAL * 1000)
     }
 
@@ -168,9 +194,11 @@ class Scan extends Component {
             this.setState({
                 scanResult: 'correct',
                 clicked: true,
-                show:false
+                show:false,
+                scanScore: this.state.scanScore + ScanUtils.CORRECT_SCAN_LOW_POINT
             })
             this.resetScanResult()
+
             return
         }
 
@@ -189,6 +217,11 @@ class Scan extends Component {
         console.log('truck AI suggest: ', ScanUtils.AI_suggestion)
         console.log('truck interval: ', ScanUtils.AI_TRUCK_INTERVAL_ARRAY)
 
+        this.showOneTruck()
+
+    }
+
+    showOneTruck(){
         const startTime = moment().unix()
         const truckPeriod = ScanUtils.AI_TRUCK_INTERVAL_ARRAY[this.state.trial]
         const endTime = startTime + truckPeriod
@@ -209,12 +242,13 @@ class Scan extends Component {
                 break;
         }
 
-        //set time out
         /*
          2 time out that we need to cater, 2 cases
          - alarm time: show alert
          - truck is totally expired: after 10 + end time > start a new round
          */
+
+        //time out when expired
         const { setTimeout } = this.props.reactTimeout
         const showEndTrial = setTimeout(() => {
 
@@ -223,6 +257,7 @@ class Scan extends Component {
 
         }, (truckPeriod + 10 ) * 1000 )
 
+        //time out when alert truck full
         let showAlertTruck
         switch (alarmType){
             case ScanUtils.AI_CORRECT: //show correct alert
@@ -244,7 +279,8 @@ class Scan extends Component {
                 break;
         }
 
-        this.resetTruckForNewRound()
+        //reset for new round and start round
+        this.resetTruckForNewTrial()
         console.log(`${this.state.trial} - trial begin`)
 
         //show one truck here
@@ -255,8 +291,7 @@ class Scan extends Component {
             truckAlarmTime: alarmTime,
         })
 
-        console.log('state after set truck detail, ',  alarmType, startTime, endTime, alarmTime)
-
+        console.log('Start new Truck: state after set truck detail: ',  alarmType, startTime, endTime, alarmTime)
     }
 
     displayTruckAlert(){
@@ -266,35 +301,103 @@ class Scan extends Component {
     }
 
     updateTruckWhenExpired(){
+        console.log('truck expired here')
         if( this.state.isClickedDispatch){
             return
         }
 
         //show that truck is expired and end a trial
-        this.setState({showRatingForm: true})
+        //show score result
+        this.setState({
+            showScoreBoard: true
+        })
 
         //start a new trial if not end yet
         if(this.state.trial >= ScanUtils.TOTAL_TRIAL) return
-        this.startTruckTrial()
+        this.componentDidMount()
     }
 
-    resetTruckForNewRound(){
+    dispatchATruck(){
+
+        //calculate score
+        const currentTime = moment().unix()
+        const endTime = this.state.truckEndTime
+        var truckScore, truckResult
+        if(currentTime < endTime){ //under load
+            truckScore = 0
+            truckResult='underload'
+        }else if( currentTime <= endTime + 10){//correct
+            truckScore = 100
+            truckResult='success'
+        }else if(currentTime > endTime + 10){ //overload
+            truckScore = 0
+            truckResult='overload'
+        }
+        this.setState({truckScore: truckScore, truckResult: truckResult, isClickedDispatch:true})
+
+        //show score result
         this.setState({
-            truckAlarmType: -1,
+            showScoreBoard: true
+        })
+    }
+
+    saveScoreRecordToState(){
+        this.props.setScoreRecord({
+            trial: this.state.trial,
+            scan: this.state.scanScore,
+            truck: this.state.truckScore
+        })
+    }
+
+    resetTruckForNewTrial(){
+        this.setState({
+            clicked: false,
+            show: true,
+            round : 0,
+            trial: this.state.trial + 1,
+            scanResult: '',
+            timeOut: false,
+            scanScore: 0,
+            truckScore: 0,
+
             truckStartTime: -1,
             truckEndTime: -1,
+            truckAlarmType: -1,
             truckAlarmTime: -1,
-            trial : this.state.trial + 1,
-            showTruckAlert: false
+            currentTruckPercent: -1,
+            truckFull: false,
+            timeLeft: -1,
+            isClickedDispatch: false,
+            showTruckAlert: false,
+            showRatingForm: false,
+            showScoreBoard: false,
+            rateValue: -1,
+            truckResult: ''
         })
     }
 
     setARating(rate){
-        console.log('rate: ', rate)
         this.setState({
             rateValue: rate
         })
     }
+
+    getTotalScanScoreUpToNow(){
+        var totalScan = 0
+        for( var i = 1 ; i < this.state.trial; i++){
+            totalScan += this.props.scoreRecord[i-1]['scan']
+        }
+        return totalScan
+    }
+
+    getTotalTruckScoreUpToNow(){
+        var totalTruck = 0
+        for( var i = 1 ; i < this.state.trial; i++){
+            totalTruck += this.props.scoreRecord[i-1]['truck']
+        }
+        return totalTruck
+    }
+
     render() {
         const {correctImage, wrongImage, score} = this.props
 
@@ -355,13 +458,69 @@ class Scan extends Component {
                     </div>
                 </Dialog>
 
+                <Dialog
+                    opened={this.state.showScoreBoard}
+                    headerLeft={'Your performance'}
+                >
+
+                    <div style={{ padding: 0 }}>
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            {(()=> {
+                                if(this.state.truckResult === 'success'){
+                                    return (
+                                        <p  style={{margin : 0}}>You have <strong style={{ color:  ScanUtils.CORRECT_COLOR}}>successfully</strong> dispatched the truck
+                                        </p>
+                                    )
+                                }else {
+                                    return (
+                                        <p  style={{margin : 0}}>You have failed to dispatch the truck: {this.state.truckResult}</p>
+                                    )
+                                }
+                            })()}
+                        </div>
+                        <br />
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <p  style={{margin : 0}}>This round your score for receiving package is: {this.state.scanScore}</p>
+                        </div>
+                        <br />
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <p  style={{margin : 0}}>This round your score for dispatching truck is: {this.state.truckScore}</p>
+                        </div>
+                        <br />
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <p  style={{margin : 0}}>Your accumulative score for receiving package is: {this.state.scanScore + this.getTotalScanScoreUpToNow() }</p>
+                        </div>
+                        <br />
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <p  style={{margin : 0}}>Your accumulative score for dispatching truck is: {this.state.truckScore + this.getTotalTruckScoreUpToNow() }</p>
+                        </div>
+                        <br />
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <button className="btn btn-success mce-btn-large"
+                                    style={{margin: 0}}
+                                    onClick={() => {
+                                    this.setState({showRatingForm: true, showScoreBoard: false})
+                                    this.saveScoreRecordToState()
+                                    }}>OK</button>
+                        </div>
+                    </div>
+                </Dialog>
+
                 <div className="row">
                     <div className="col-sm-6">
                         {(() => {
                             if(this.state.currentPage === 'scan'){
                                 return (
                                     <div>
-                                        <TruckAlert showTruckAlert={this.state.showTruckAlert} />
+                                        <TruckAlert showTruckAlert={this.state.showTruckAlert}
+                                                    dispatchATruck = {this.dispatchATruck}
+                                        />
                                         <ScanResult scanResult={this.state.scanResult} />
                                         </div>
                                 )
@@ -392,7 +551,8 @@ function mapStateToProps(state, ownProps) {
     return {
         correctImage: state.scan.correctImage,
         wrongImage: state.scan.wrongImage,
-        score: state.scan.score
+        score: state.scan.score,
+        scoreRecord: state.scan.scoreRecord
     }
 }
 
@@ -400,7 +560,8 @@ function mapDispatchToProps(dispatch, ownProps) {
     return {
         setCorrectImage: bindActionCreators(setCorrectImage, dispatch),
         setWrongImage: bindActionCreators(setWrongImage, dispatch),
-        setScore: bindActionCreators(setScore, dispatch)
+        setScore: bindActionCreators(setScore, dispatch),
+        setScoreRecord: bindActionCreators(setScoreRecord, dispatch)
     }
 }
 
