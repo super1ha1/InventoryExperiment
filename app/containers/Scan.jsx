@@ -13,6 +13,8 @@ import { Header } from '../components/Header.jsx'
 import { ScanResult } from '../components/ScanResult.jsx'
 import { TruckAlert } from '../components/TruckAlert.jsx'
 import { TruckBody } from '../components/TruckBody.jsx'
+import Dialog from '../components/Dialog';
+import Rating  from 'react-rating';
 import * as ScanUtils from '../utils/ScanUtils'
 import moment from 'moment'
 
@@ -38,7 +40,9 @@ class Scan extends Component {
                 truckFull: false,
                 timeLeft: 0,
                 isClickedDispatch: false,
-                showTruckAlert: false
+                showTruckAlert: false,
+                showRatingForm: true,
+                rateValue: -1
         };
 
         //scan
@@ -53,6 +57,7 @@ class Scan extends Component {
         this.resetTruckForNewRound = this.resetTruckForNewRound.bind(this)
         this.updateTruckWhenExpired = this.updateTruckWhenExpired.bind(this)
         this.displayTruckAlert = this.displayTruckAlert.bind(this)
+        this.setARating = this.setARating.bind(this)
     }
 
     componentDidMount(){
@@ -266,7 +271,7 @@ class Scan extends Component {
         }
 
         //show that truck is expired and end a trial
-
+        this.setState({showRatingForm: true})
 
         //start a new trial if not end yet
         if(this.state.trial >= ScanUtils.TOTAL_TRIAL) return
@@ -284,6 +289,12 @@ class Scan extends Component {
         })
     }
 
+    setARating(rate){
+        console.log('rate: ', rate)
+        this.setState({
+            rateValue: rate
+        })
+    }
     render() {
         const {correctImage, wrongImage, score} = this.props
 
@@ -292,12 +303,60 @@ class Scan extends Component {
             <div className="container">
                 <Header  {...this.state}
                         onNavigationClick={this.onNavigationClick.bind(this)}
+                        onClick={this.displayTruckAlert}
                 />
 
+                <Dialog
+                    opened={this.state.showRatingForm}
+                    headerLeft={'Please indicate your trust level of the sensor'}
+                    clickRightIconHandler={() => {
+                        alert('please select a rating!')
+                    }}
+                >
+
+                    <div style={{ padding: 0 }}>
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <Rating
+                                start = {0}
+                                stop = {9}
+                                onClick={this.setARating}
+                                style={{padding: 5, width:'100%',margin : 0}}
+                            />
+                        </div>
+
+                        <div style={{display: 'inline', width: '100%'}} >
+                            <div style={{float: 'left', width:'100px', height: 'auto', lineHeight:'0.5'}}>
+                                <p>I don't trust the</p>
+                                <p>sensor at all</p>
+                            </div>
+                            <div style={{float: 'right', width:'120px', height: 'auto', lineHeight:'0.5', paddingLeft: '15px'}}>
+                                <p>I absolutely trust</p>
+                                <p>the sensor</p>
+                            </div>
+                        </div>
+
+                        <br />
+                        <br />
+
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <p  style={{margin : 0}}>You selected: {this.state.rateValue == -1 ? '?' : this.state.rateValue}</p>
+                        </div>
+
+                        <br />
+
+                        <div style={{display: 'flex', justifyContent: 'center'}}>
+                            <button className="btn btn-success mce-btn-large"
+                                    style={{margin: 0}}
+                                    onClick={() => this.setState({showRatingForm: false})}>OK</button>
+                        </div>
+
+
+                    </div>
+                </Dialog>
+
                 <div className="row">
-
                     <div className="col-sm-6">
-
                         {(() => {
                             if(this.state.currentPage === 'scan'){
                                 return (
