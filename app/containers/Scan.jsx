@@ -25,24 +25,34 @@ class Scan extends Component {
             show: false,
             clicked: false,
             round : 0,
+            trial: 0,
             scanResult: '',
             timeOut: false,
             currentPage: 'scan',
-            truckStartTime: 0,
-            truckEndTime: 0,
-            truckAlarmType: 0,
-            truckAlarmTime: 0,
-            currentTruckPercent: 0,
-            truckFull: false,
-            timeLeft: 0,
+
+                truckStartTime: 0,
+                truckEndTime: 0,
+                truckAlarmType: 0,
+                truckAlarmTime: 0,
+                currentTruckPercent: 0,
+                truckFull: false,
+                timeLeft: 0,
+                isClickedDispatch: false,
+                showTruckAlert: false
         };
 
+        //scan
         this.showOneScan = this.showOneScan.bind(this)
         this.updateWhenTimeOut = this.updateWhenTimeOut.bind(this)
         this.intervalShowScan = this.intervalShowScan.bind(this)
         this.resetScanResult = this.resetScanResult.bind(this)
         this.resetForNewRound = this.resetForNewRound.bind(this)
+
+        //truck
         this.startTruckTrial = this.startTruckTrial.bind(this)
+        this.resetTruckForNewRound = this.resetTruckForNewRound.bind(this)
+        this.updateTruckWhenExpired = this.updateTruckWhenExpired.bind(this)
+        this.displayTruckAlert = this.displayTruckAlert.bind(this)
     }
 
     componentDidMount(){
@@ -76,44 +86,6 @@ class Scan extends Component {
         })
     }
 
-
-    startTruckTrial(){
-        console.log('truck AI suggest: ', ScanUtils.AI_suggestion)
-        console.log('truck interval: ', ScanUtils.AI_TRUCK_INTERVAL_ARRAY)
-
-        const startTime = moment().unix()
-        const truckPeriod = ScanUtils.AI_TRUCK_INTERVAL_ARRAY[this.state.round]
-        const endTime = startTime + truckPeriod
-        const alarmType = ScanUtils.AI_suggestion[this.state.round]
-
-        let alarmTime;
-        switch (alarmType){
-            case ScanUtils.AI_CORRECT:
-                alarmTime = endTime
-                break;
-
-            case ScanUtils.AI_FALSE_ALARM:
-                alarmTime = startTime + Math.floor(truckPeriod/2)
-                break;
-
-            case ScanUtils.AI_MISS_ALARM:
-                alarmTime = 0
-                break;
-
-            default:
-                break;
-        }
-
-        this.setState({
-            truckAlarmType: alarmType,
-            truckStartTime: startTime,
-            truckEndTime: endTime,
-            truckAlarmTime: alarmTime
-        })
-
-        console.log('state after set truck detail, ',  alarmType, startTime, endTime, alarmTime)
-
-    }
     showOneScan(){
         const { setTimeout } = this.props.reactTimeout
         const { wrongImage} = this.props
@@ -137,7 +109,7 @@ class Scan extends Component {
         const { setInterval } = this.props.reactTimeout
         const id = setInterval(() => {
             this.showOneScan()
-            if(this.state.round === ScanUtils.TOTAL_SCAN_TRIAL){
+            if(this.state.round === ScanUtils.TOTAL_TRIAL){
                 console.log("Clear interval here")
                 clearInterval(id)
             }
@@ -168,7 +140,6 @@ class Scan extends Component {
     }
 
     resetForNewRound(){
-
         this.setState({
             clicked: false,
             scanResult: '',
@@ -176,7 +147,6 @@ class Scan extends Component {
             round : this.state.round + 1,
             show: true
         })
-
     }
 
     onImageClick(index){
@@ -208,6 +178,112 @@ class Scan extends Component {
         this.resetScanResult()
     }
 
+    startTruckTrial(){
+
+        //1 calculate the alarm type and alarm time, start time, end time
+        console.log('truck AI suggest: ', ScanUtils.AI_suggestion)
+        console.log('truck interval: ', ScanUtils.AI_TRUCK_INTERVAL_ARRAY)
+
+        const startTime = moment().unix()
+        const truckPeriod = ScanUtils.AI_TRUCK_INTERVAL_ARRAY[this.state.trial]
+        const endTime = startTime + truckPeriod
+        const alarmType = ScanUtils.AI_suggestion[this.state.trial]
+
+        let alarmTime;
+        switch (alarmType){
+            case ScanUtils.AI_CORRECT:
+                alarmTime = endTime
+                break;
+
+            case ScanUtils.AI_FALSE_ALARM:
+                alarmTime = startTime + Math.floor(truckPeriod/2)
+                break;
+
+            case ScanUtils.AI_MISS_ALARM:
+                alarmTime = 0
+                break;
+        }
+
+        //set time out
+        /*
+         2 time out that we need to cater, 2 cases
+         - alarm time: show alert
+         - truck is totally expired: after 10 + end time > start a new round
+         */
+        const { setTimeout } = this.props.reactTimeout
+        const showEndTrial = setTimeout(() => {
+
+            console.log(`${this.state.trial} - trial end`)
+            this.updateTruckWhenExpired()
+
+        }, (truckPeriod + 10 ) * 1000 )
+
+        let showAlertTruck
+        switch (alarmType){
+            case ScanUtils.AI_CORRECT: //show correct alert
+                showAlertTruck = setTimeout(() => {
+                    console.log(`show alert correct`)
+                    this.displayTruckAlert()
+                }, truckPeriod * 1000)
+                break;
+
+            case ScanUtils.AI_FALSE_ALARM:
+                showAlertTruck = setTimeout(() => {
+                    console.log(`show alert wrong`)
+                    this.displayTruckAlert()
+                }, (truckPeriod /2) * 1000)
+                break;
+
+            case ScanUtils.AI_MISS_ALARM:
+                showAlertTruck = null;
+                break;
+        }
+
+        this.resetTruckForNewRound()
+        console.log(`${this.state.trial} - trial begin`)
+
+        //show one truck here
+        this.setState({
+            truckAlarmType: alarmType,
+            truckStartTime: startTime,
+            truckEndTime: endTime,
+            truckAlarmTime: alarmTime,
+        })
+
+        console.log('state after set truck detail, ',  alarmType, startTime, endTime, alarmTime)
+
+    }
+
+    displayTruckAlert(){
+        this.setState({
+            showTruckAlert: true
+        })
+    }
+
+    updateTruckWhenExpired(){
+        if( this.state.isClickedDispatch){
+            return
+        }
+
+        //show that truck is expired and end a trial
+
+
+        //start a new trial if not end yet
+        if(this.state.trial >= ScanUtils.TOTAL_TRIAL) return
+        this.startTruckTrial()
+    }
+
+    resetTruckForNewRound(){
+        this.setState({
+            truckAlarmType: -1,
+            truckStartTime: -1,
+            truckEndTime: -1,
+            truckAlarmTime: -1,
+            trial : this.state.trial + 1,
+            showTruckAlert: false
+        })
+    }
+
     render() {
         const {correctImage, wrongImage, score} = this.props
 
@@ -226,7 +302,7 @@ class Scan extends Component {
                             if(this.state.currentPage === 'scan'){
                                 return (
                                     <div>
-                                        <TruckAlert />
+                                        <TruckAlert showTruckAlert={this.state.showTruckAlert} />
                                         <ScanResult scanResult={this.state.scanResult} />
                                         </div>
                                 )

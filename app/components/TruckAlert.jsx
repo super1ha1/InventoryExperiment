@@ -9,17 +9,27 @@ import '../css/app.css';
 import _ from 'lodash';
 import Immutable from 'immutable';
 
-export  const TruckAlert = ({}) => (
-    <div className="row">
-        <div className="col-sm-12">
-            <div className="span7 text-center">
-                <h4 className="text-center">Truck Alert</h4>
-                        <pre id="alarm" className="text-danger text-uppercase"
-                             style={{backgroundColor: '#FFFFFF', fontSize: '20px',
-                         height: '50px'}}  ></pre>
-                <br/>
-                <button className="btn btn-success mce-btn-large" ng-click="open()">Dispatch Truck</button>
+
+export  class TruckAlert extends  Component {
+
+    render(){
+        const {showTruckAlert} = this.props
+        return (
+            <div className="row">
+                <div className="col-sm-12">
+                    <div className="span7 text-center">
+                        <h4 className="text-center">Truck Alert</h4>
+                            <pre id="alarm" className="text-danger text-uppercase"
+                                 style={{backgroundColor: '#FFFFFF', fontSize: '20px',
+                                 height: '65px'}}  >
+                                <p style={{  visibility: showTruckAlert ? 'visible' : 'hidden'}}>Truck is full</p>
+                            </pre>
+                        <br/>
+                        <button className="btn btn-success mce-btn-large" ng-click="open()">Dispatch Truck</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-)
+        )
+    }
+}
+
